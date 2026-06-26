@@ -342,11 +342,57 @@ def build():
     md_path = out_dir / f"{BOOK_SLUG}.md"
     md_path.write_text("\n".join(md), encoding="utf-8")
 
+    apkg_path = build_apkg(out_dir)
+
     print(f"Wrote {len(CARDS)} cards")
     print(f"  - {tsv_path.relative_to(root)}")
     print(f"  - {md_path.relative_to(root)}")
+    if apkg_path:
+        print(f"  - {apkg_path.relative_to(root)}  (double-click to import)")
     counts = {p: len([c for c in CARDS if c['plane'] == p]) for p in PLANE_ORDER}
     print("  planes:", counts)
+
+
+# Stable IDs so re-importing UPDATES the same deck instead of duplicating it.
+DECK_ID = 1987452310
+MODEL_ID = 1987452311
+
+
+def build_apkg(out_dir):
+    """Emit a native Anki .apkg (downloadable, double-click to import)."""
+    try:
+        import genanki
+    except ImportError:
+        print("  (genanki not installed -> skipping .apkg; pip install genanki)")
+        return None
+
+    model = genanki.Model(
+        MODEL_ID,
+        "C2 Cloze (immersion)",
+        fields=[{"name": "Text"}, {"name": "Back Extra"}],
+        templates=[{
+            "name": "Cloze",
+            "qfmt": "{{cloze:Text}}",
+            "afmt": "{{cloze:Text}}<hr id=answer>{{Back Extra}}",
+        }],
+        css=(".card{font-family:Georgia,serif;font-size:20px;color:#222;"
+             "text-align:left;max-width:640px;margin:0 auto;line-height:1.5}"
+             ".cloze{font-weight:bold;color:#1565c0}"
+             "#answer{margin:14px 0}b{color:#000}i{color:#666}"),
+        model_type=genanki.Model.CLOZE,
+    )
+
+    deck = genanki.Deck(DECK_ID, f"english::{BOOK_SLUG}")
+    for c in CARDS:
+        deck.add_note(genanki.Note(
+            model=model,
+            fields=[c["text"], back_html(c)],
+            tags=[BOOK_SLUG, "c2", c["plane"]],
+        ))
+
+    apkg_path = out_dir / f"{BOOK_SLUG}.apkg"
+    genanki.Package(deck).write_to_file(str(apkg_path))
+    return apkg_path
 
 
 if __name__ == "__main__":
