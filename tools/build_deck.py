@@ -13,6 +13,7 @@ Emits (next to this repo root, under decks/):
 
 from pathlib import Path
 
+LANGUAGE = "english"   # output folder: one per language (english/, french/, ...)
 BOOK_SLUG = "nietzsche-truth-lies"
 BOOK_TITLE = "On Truth and Lies in a Nonmoral Sense (Breazeale tr.)"
 SOURCE = "YouTube audiobook, W. A. Haussmann reading / Breazeale translation"
@@ -290,7 +291,7 @@ def tags_for(c):
 
 def build():
     root = Path(__file__).resolve().parent.parent
-    out_dir = root / "decks"
+    out_dir = root / LANGUAGE
     out_dir.mkdir(exist_ok=True)
 
     # --- TSV (Anki import) ---
@@ -314,7 +315,7 @@ def build():
         "",
         "## How to import into Anki",
         "",
-        f"1. File → Import → `decks/{BOOK_SLUG}.tsv`",
+        f"1. File → Import → `{LANGUAGE}/{BOOK_SLUG}.tsv`  (or just double-click the `.apkg`)",
         "2. Note type: **Cloze**  |  Deck: **english**",
         "3. Field separator: **Tab**  |  **Allow HTML in fields: ON**",
         "4. Map: column 1 → *Text*, column 2 → *Back Extra*, column 3 → *Tags*",

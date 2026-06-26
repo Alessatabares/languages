@@ -6,7 +6,7 @@
 
 ## How to import into Anki
 
-1. File → Import → `decks/nietzsche-truth-lies.tsv`
+1. File → Import → `english/nietzsche-truth-lies.tsv`  (or just double-click the `.apkg`)
 2. Note type: **Cloze**  |  Deck: **english**
 3. Field separator: **Tab**  |  **Allow HTML in fields: ON**
 4. Map: column 1 → *Text*, column 2 → *Back Extra*, column 3 → *Tags*
