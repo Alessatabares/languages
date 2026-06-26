@@ -8,8 +8,8 @@ Jupyter / edge-tts immersion system was removed — this repo is decks only.
 
 - One folder per language: `english/`, `french/`, ...
 - `tools/build_deck.py` — the generator. Holds a `CARDS` list and emits, into
-  the `LANGUAGE` folder, three files per deck: `.apkg` (download + double-click),
-  `.tsv` (manual import), `.md` (readable on GitHub).
+  the `LANGUAGE` folder, one file per deck: `.apkg` (download + double-click).
+  Folders hold only the `.apkg` — no `.tsv`/`.md`.
 
 ## The deck workflow (per YouTube video)
 

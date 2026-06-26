@@ -9,19 +9,15 @@ verb/grammar constructions, and connectors that elevate writing.
 ```
 languages/
 ├── english/        # decks built from English videos
-│   └── nietzsche-truth-lies.{apkg,tsv,md}
+│   └── nietzsche-truth-lies.apkg
 ├── french/         # (coming)
 └── tools/
-    └── build_deck.py   # generator: card list -> .apkg + .tsv + .md
+    └── build_deck.py   # generator: card list -> .apkg
 ```
 
-## Each deck = 3 files
+## Each deck = one `.apkg`
 
-| File | Use |
-|---|---|
-| `.apkg` | **Download and double-click** → imports straight into Anki |
-| `.tsv`  | Manual import (note type Cloze, separator Tab, Allow HTML) |
-| `.md`   | Readable on GitHub, grouped by plane |
+**Download and double-click** → imports straight into Anki. That's it.
 
 ## Card design
 
@@ -38,7 +34,7 @@ Back (all in English, on purpose — monolingual = transfer):
 2. Curate the C1→C2 items across three planes: advanced lexis · verbs &
    grammar · connectors. Skip what's already B2, plus proper nouns and Latin.
 3. Add them to a `CARDS` list and run the generator.
-4. Commit the three output files into the language folder.
+4. Commit the `.apkg` into the language folder.
 
 ```bash
 pip install -r requirements.txt

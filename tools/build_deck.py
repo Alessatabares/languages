@@ -294,60 +294,9 @@ def build():
     out_dir = root / LANGUAGE
     out_dir.mkdir(exist_ok=True)
 
-    # --- TSV (Anki import) ---
-    tsv_lines = []
-    for c in CARDS:
-        text = c["text"].replace("\t", " ").replace("\n", " ")
-        extra = back_html(c).replace("\t", " ").replace("\n", " ")
-        tsv_lines.append(f"{text}\t{extra}\t{tags_for(c)}")
-    tsv_path = out_dir / f"{BOOK_SLUG}.tsv"
-    tsv_path.write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
-
-    # --- Markdown (readable on GitHub) ---
-    md = [
-        f"# Deck: {BOOK_TITLE}",
-        "",
-        f"*Source: {SOURCE}.* All back content is in English on purpose "
-        "(monolingual = transfer). Target: the B2/C1 → C2 jump.",
-        "",
-        f"**{len(CARDS)} cards** across three planes. Cloze note type; "
-        "front = the real sentence with the term hidden.",
-        "",
-        "## How to import into Anki",
-        "",
-        f"1. File → Import → `{LANGUAGE}/{BOOK_SLUG}.tsv`  (or just double-click the `.apkg`)",
-        "2. Note type: **Cloze**  |  Deck: **english**",
-        "3. Field separator: **Tab**  |  **Allow HTML in fields: ON**",
-        "4. Map: column 1 → *Text*, column 2 → *Back Extra*, column 3 → *Tags*",
-        "",
-    ]
-    for plane in PLANE_ORDER:
-        items = [c for c in CARDS if c["plane"] == plane]
-        if not items:
-            continue
-        md.append(f"## {PLANE_TITLES[plane]}")
-        md.append("")
-        for c in items:
-            shown = c["text"].replace("{{c1::", "**[ ").replace("}}", " ]**")
-            md.append(f"- **{c['term']}** — {shown}")
-            md.append(f"  - *Intention:* {c['intention']}")
-            if c.get("image"):
-                md.append(f"  - *Image:* {c['image']}")
-            if c.get("pattern"):
-                md.append(f"  - *Pattern:* `{c['pattern']}`")
-            if c.get("synonyms"):
-                md.append(f"  - *Synonyms:* {c['synonyms']}")
-            if c.get("note"):
-                md.append(f"  - *Note:* {c['note']}")
-        md.append("")
-    md_path = out_dir / f"{BOOK_SLUG}.md"
-    md_path.write_text("\n".join(md), encoding="utf-8")
-
     apkg_path = build_apkg(out_dir)
 
     print(f"Wrote {len(CARDS)} cards")
-    print(f"  - {tsv_path.relative_to(root)}")
-    print(f"  - {md_path.relative_to(root)}")
     if apkg_path:
         print(f"  - {apkg_path.relative_to(root)}  (double-click to import)")
     counts = {p: len([c for c in CARDS if c['plane'] == p]) for p in PLANE_ORDER}
