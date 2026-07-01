@@ -5,7 +5,11 @@ deck_english_nietzsche.py) defines its CARDS and calls build().
 
 Card dict fields (all optional except text + intention):
   plane     : "vocab" | "verb-construction" | "grammar" | "connector" | "expression"
-  text      : the real sentence from the video, with {{c1::term}} clozed
+  rule      : the discriminator headline shown big on the back (pattern decks:
+              "who -> a PERSON . which -> a THING"). Renders first, in red.
+  text      : the real sentence from the video, with {{c1::term}} clozed.
+              For pattern cards, several example lines separated by "\n"; put an
+              optional non-clozed title on the first line ("who vs which").
   meaning   : English gloss of the term  (use for lower levels, e.g. A2 French)
   intention : when you reach for it / the job it does (English)
   image     : a vivid mental picture (concrete lexis)
@@ -20,13 +24,18 @@ MODEL_ID = 1987452311  # shared note type across every deck
 PLANE_ORDER = ["vocab", "verb-construction", "grammar", "connector", "expression"]
 
 _CSS = (".card{font-family:Georgia,serif;font-size:20px;color:#222;"
-        "text-align:left;max-width:640px;margin:0 auto;line-height:1.5}"
+        "text-align:left;max-width:640px;margin:0 auto;line-height:1.6}"
         ".cloze{font-weight:bold;color:#1565c0}"
+        ".title{font-size:15px;font-weight:bold;letter-spacing:.05em;"
+        "text-transform:uppercase;color:#888;margin-bottom:10px}"
+        ".rule{font-size:22px;font-weight:bold;color:#b71c1c;margin:0 0 12px}"
         "#answer{margin:14px 0}b{color:#000}i{color:#666}")
 
 
 def back_html(c):
     parts = []
+    if c.get("rule"):
+        parts.append(f"<div class='rule'>{c['rule']}</div>")
     if c.get("meaning"):
         parts.append(f"<b>Meaning:</b> {c['meaning']}")
     parts.append(f"<b>Intention:</b> {c['intention']}")
@@ -41,8 +50,12 @@ def back_html(c):
     return "<br>".join(parts)
 
 
-def build(language, slug, deck_id, cards, level):
-    """Write <root>/<language>/<slug>.apkg. deck_id must be stable per deck."""
+def build(language, slug, deck_id, cards, level, description=""):
+    """Write <root>/<language>/<slug>.apkg. deck_id must be stable per deck.
+
+    description: per-deck blurb shown in Anki's deck overview (distinct per deck;
+    holds its own level note and the YouTube source link). Each deck sets its own.
+    """
     import genanki
 
     root = Path(__file__).resolve().parent.parent
@@ -61,11 +74,11 @@ def build(language, slug, deck_id, cards, level):
         model_type=genanki.Model.CLOZE,
     )
 
-    deck = genanki.Deck(deck_id, f"{language}::{slug}")
+    deck = genanki.Deck(deck_id, f"{language}::{slug}", description=description)
     for c in cards:
         deck.add_note(genanki.Note(
             model=model,
-            fields=[c["text"], back_html(c)],
+            fields=[c["text"].replace("\n", "<br>"), back_html(c)],
             tags=[slug, level, c["plane"]],
         ))
 

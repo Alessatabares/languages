@@ -35,365 +35,427 @@ DESCRIPTION = (
     "memorable. Study one plane (tag) at a time. Monolingual English = transfer."
 )
 
-# Each card:
-#   term      : the target item (also the cloze answer) — for readability only
-#   text      : a short, funny sentence with {{c1::term}} clozed
-#   intention : the JOB the word does (system thinking)
-#   image     : a vivid/absurd mental picture (concrete words) OR omit
-#   pattern   : the reusable, generative frame (verbs/grammar/connectors) OR omit
-#   synonyms  : register equivalents OR omit
-#   note      : the one-line contrast with a confusable neighbour OR omit
+# PATTERN-CENTRIC design (hybrid). The learning unit is the PATTERN, not the word:
+#   FORK (the discriminator) -> VARIATION (several examples) -> COMPRESSION (the rule).
+#
+# Two card shapes, same note type:
+#   1) CONTRAST SET — a fork with a confusable neighbour (who vs which, much vs
+#      many). Front = a <div class='title'> naming the fork + 4-6 varied example
+#      lines, EACH with its pivot in {{c1::...}}. All blanks are c1 -> ONE card
+#      ("fill every blank"), and the answers differ across lines so you must
+#      actually discriminate, not autopilot.
+#   2) SIMPLE — an item with no obvious neighbour (of, used to). Front = 1-2
+#      example lines clozed; no title needed.
+#
+# Fields:
 #   plane     : "grammar" | "verb-construction" | "connector" | "expression"
+#   rule      : the discriminator headline, shown big/red first on the back
+#   text      : title (optional <div class='title'>) + example line(s), "\n"-joined,
+#               pivots in {{c1::...}}  (invented on purpose — vivid & funny = memorable)
+#   intention : the JOB the pattern does (system thinking)
+#   image / pattern / synonyms / note : optional, as before
 
 CARDS = [
-    # ============ A. PRONOUNS & DETERMINERS (point / refer) ============
-    dict(plane="grammar", term="It",
-         text="{{c1::It}}'s raining frogs again, and nobody is surprised.",
-         intention="Dummy 'it': the empty subject for weather, time and distance. English refuses a sentence with no subject, so 'it' fills the slot.",
-         image="A blank name-tag that just says 'IT' standing in for the sky.",
-         note="Not a real thing — just holds the subject seat."),
-    dict(plane="grammar", term="they",
-         text="Somebody left a sandwich in the printer; {{c1::they}} know what they did.",
-         intention="Singular 'they': refer to one unknown (or unspecified) person without picking he/she.",
-         pattern="someone / a person ... they",
-         note="Fully standard for an unknown or nonbinary referent."),
-    dict(plane="grammar", term="this",
-         text="Take {{c1::this}} one here, not that one across the room.",
-         intention="this/these = near me; that/those = far from me. Points in space, time and conversation.",
-         image="Jabbing at your own shoe ('this') vs pointing at the moon ('that').",
+    # ============ A. POINTING & REFERENCE (point / refer) ============
+    dict(plane="grammar",
+         rule="who → a PERSON · which → a THING · that → either (informal)",
+         text=("<div class='title'>who vs which</div>"
+               "① The neighbour {{c1::who}} narrates his own life is back.\n"
+               "② He bought a horn {{c1::which}} only plays one sad note.\n"
+               "③ The barista {{c1::who}} remembers my order is a wizard.\n"
+               "④ A law {{c1::which}} nobody enforces is just a suggestion.\n"
+               "⑤ People {{c1::who}} clap when the plane lands worry me."),
+         intention="Relative pronouns glue extra info onto a noun; the blank forces the person/thing choice.",
+         pattern="the PERSON who + verb · the THING which/that + verb",
+         note="Trap: 'that' works for both informally, but never use 'which' for a person."),
+    dict(plane="grammar",
+         rule="this/these → near me · that/those → far from me",
+         text=("<div class='title'>this / that / these / those</div>"
+               "① Take {{c1::this}} pen here, not that one across the room.\n"
+               "② {{c1::That}} noise upstairs has opinions.\n"
+               "③ {{c1::These}} socks (on my feet) don't match.\n"
+               "④ Who left {{c1::those}} shoes by the far door?"),
+         intention="Demonstratives point by distance in space, time and conversation.",
+         image="Jabbing your own shoe ('this') vs pointing at the moon ('that').",
          note="this/that = singular; these/those = plural."),
-    dict(plane="grammar", term="who",
-         text="The neighbour {{c1::who}} narrates his own life is back.",
-         intention="Relative 'who': glue extra info about a PERSON onto a noun.",
-         pattern="the person who + verb...",
-         note="who = people; which = things; that = either (informal)."),
-    dict(plane="grammar", term="which",
-         text="He bought a horn {{c1::which}} only plays one sad note.",
-         intention="Relative 'which': glue extra info about a THING onto a noun.",
-         pattern="the thing which / that + verb..."),
-    dict(plane="grammar", term="a",
-         text="I adopted {{c1::a}} goose today.",
-         intention="'a/an' = one, new to the listener — first mention, not yet specific.",
-         image="A goose with a fresh 'NEW' sticker on it.",
+    dict(plane="grammar",
+         rule="dummy IT → weather/time/distance · dummy THERE → something EXISTS",
+         text=("<div class='title'>dummy it vs there</div>"
+               "① {{c1::It}}'s raining frogs again, and nobody is surprised.\n"
+               "② {{c1::There}}'s a raccoon in the lobby acting like a guest.\n"
+               "③ {{c1::It}}'s already Monday? Rude.\n"
+               "④ {{c1::There}} are three unread alarms judging me."),
+         intention="English refuses a subjectless sentence: 'it' fills the seat; 'there' announces existence.",
+         pattern="It is + weather/time · There is/are + something new",
+         note="Neither is a real thing — both just hold the subject slot."),
+    dict(plane="grammar",
+         rule="singular they → one unknown/unspecified person, no he/she",
+         text="Somebody left a sandwich in the printer; {{c1::they}} know what they did.",
+         intention="Refer to one unknown (or nonbinary) person without picking he or she.",
+         pattern="someone / a person ... they",
+         note="Fully standard for an unknown referent."),
+
+    # ============ B. ARTICLES & QUANTITY (new vs known, count vs mass) ============
+    dict(plane="grammar",
+         rule="a → new to the listener (1st mention) · the → we both know which one",
+         text=("<div class='title'>a vs the</div>"
+               "① I adopted {{c1::a}} goose today.\n"
+               "② Then {{c1::the}} goose adopted the sofa.\n"
+               "③ She wrote {{c1::a}} book about silence.\n"
+               "④ {{c1::The}} book (that one) is now a doorstop."),
+         intention="Switch a → the the moment the thing has been introduced or is unique.",
+         pattern="a (new) → the (now known)",
          note="'a' before a consonant sound, 'an' before a vowel sound."),
-    dict(plane="grammar", term="the",
-         text="Then {{c1::the}} goose adopted the sofa.",
-         intention="'the' = we both already know which one (mentioned before, or unique).",
-         pattern="a (new) -> the (now known)",
-         note="Switch a -> the the moment it's been introduced."),
-    dict(plane="grammar", term="any",
-         text="Is there {{c1::any}} dignity left after karaoke?",
-         intention="'any' for questions and negatives; 'some' for positive statements and offers.",
+    dict(plane="grammar",
+         rule="some → positive & offers · any → questions & negatives",
+         text=("<div class='title'>some vs any</div>"
+               "① Is there {{c1::any}} dignity left after karaoke?\n"
+               "② There's {{c1::some}} soup, if you're brave.\n"
+               "③ I didn't bring {{c1::any}} regrets.\n"
+               "④ Want {{c1::some}} tea? (offer)"),
+         intention="Grade unknown quantity by sentence type.",
          pattern="some (positive) ↔ any (question / negative)",
-         note="Offer exception: 'Want some tea?'"),
-    dict(plane="grammar", term="many",
-         text="Too {{c1::many}} opinions, not enough evidence.",
-         intention="'many' + countable things (opinions); 'much' + uncountable mass (evidence).",
+         note="Offer exception: 'Want some tea?' uses some, not any."),
+    dict(plane="grammar",
+         rule="many + countable (plural) · much + uncountable (mass)",
+         text=("<div class='title'>much vs many</div>"
+               "① Too {{c1::many}} opinions, not enough evidence.\n"
+               "② There isn't {{c1::much}} evidence, sadly.\n"
+               "③ How {{c1::many}} tabs are open right now?\n"
+               "④ I don't have {{c1::much}} patience left."),
+         intention="Split quantity by whether the noun counts as separate items or one mass.",
          image="A crowd of waving hands ('many') vs one grey puddle ('much').",
          note="many + plural noun | much + mass noun."),
-    dict(plane="grammar", term="every",
-         text="{{c1::Every}} plant in this house is plotting.",
-         intention="'every' = all of them, but seen one-by-one (takes a singular verb).",
-         pattern="every + singular noun + singular verb",
-         note="every = individual view; all = the whole group at once."),
+    dict(plane="grammar",
+         rule="every → all, but one-by-one (singular verb) · all → the whole group",
+         text=("<div class='title'>every vs all</div>"
+               "① {{c1::Every}} plant in this house is plotting.\n"
+               "② {{c1::All}} the plants are plotting together.\n"
+               "③ {{c1::Every}} email deserves a nap first.\n"
+               "④ {{c1::All}} my socks vanished at once."),
+         intention="Same set, two camera angles: individual view vs the group as a whole.",
+         pattern="every + singular noun + singular verb · all + plural noun + plural verb"),
 
-    # ============ B. PREPOSITIONS (place things in space / time / logic) ============
-    dict(plane="grammar", term="on",
-         text="The cat is asleep {{c1::on}} the keyboard, writing nonsense.",
-         intention="'on' = touching a surface; also for days and dates.",
-         image="A loaf-shaped cat flattening your keys.",
-         note="at = point | on = surface/day | in = inside/month."),
-    dict(plane="grammar", term="in",
-         text="My motivation is hiding {{c1::in}} a drawer somewhere.",
-         intention="'in' = inside an enclosed space; also months, years and long periods.",
-         image="A tiny 'MOTIVATION' label buried in a sock drawer.",
-         pattern="in + box / in May / in 2026"),
-    dict(plane="grammar", term="at",
-         text="Meet me {{c1::at}} the broken vending machine at noon.",
-         intention="'at' = a single precise point in space or time.",
-         pattern="at + a point / at 8pm / at night",
-         note="Zoom out: at (point) -> on (day) -> in (month)."),
-    dict(plane="grammar", term="to",
-         text="I'm walking {{c1::to}} the fridge with tremendous purpose.",
-         intention="'to' = movement toward a goal, destination or receiver.",
-         image="A bold arrow pointing fridge-ward.",
-         pattern="go / give / walk ... to + destination"),
-    dict(plane="grammar", term="from",
-         text="This smell is coming {{c1::from}} the gym bag of doom.",
-         intention="'from' = the starting point, origin or source.",
-         pattern="from + origin (from X to Y)"),
-    dict(plane="grammar", term="of",
+    # ============ C. PREPOSITIONS (place things in space / time / logic) ============
+    dict(plane="grammar",
+         rule="at → a point · on → a surface/day · in → inside/month (zoom out)",
+         text=("<div class='title'>at / on / in (place & time)</div>"
+               "① Meet me {{c1::at}} the vending machine at noon.\n"
+               "② The cat is asleep {{c1::on}} the keyboard on Monday.\n"
+               "③ My motivation is hiding {{c1::in}} a drawer, in May.\n"
+               "④ See you {{c1::at}} 8pm, {{c1::on}} Friday, {{c1::in}} 2026."),
+         intention="One scale for space AND time: precise point → surface/day → enclosed/month.",
+         image="A funnel zooming out: at (dot) → on (day) → in (month).",
+         note="Same order works for place and for time."),
+    dict(plane="grammar",
+         rule="to → toward a destination · from → the origin/source",
+         text=("<div class='title'>to vs from</div>"
+               "① I'm walking {{c1::to}} the fridge with tremendous purpose.\n"
+               "② This smell is coming {{c1::from}} the gym bag of doom.\n"
+               "③ She drove {{c1::from}} chaos {{c1::to}} slightly-less-chaos."),
+         intention="Direction as an arrow: from = tail (start), to = head (goal/receiver).",
+         pattern="go / walk / give ... from + origin ... to + destination"),
+    dict(plane="grammar",
+         rule="of → part / possession / 'made of' (the invisible glue)",
          text="The leg {{c1::of}} the table has given up on life.",
-         intention="'of' = belonging, a part, or 'made of' — the near-invisible relationship glue.",
+         intention="Near-invisible relationship glue — belonging, a part, or material.",
          pattern="the X of Y (part / possession)",
          note="Glue, not 'about'. Hugely frequent."),
-    dict(plane="grammar", term="with",
+    dict(plane="grammar",
+         rule="with → using a tool, or alongside a person",
          text="I fixed it {{c1::with}} tape and false confidence.",
-         intention="'with' = using a tool, or together alongside someone.",
+         intention="Instrument or company.",
          pattern="do X with + tool / person"),
-    dict(plane="grammar", term="for",
+    dict(plane="grammar",
+         rule="for → purpose, reason, or who benefits",
          text="This trophy is {{c1::for}} 'Most Naps Taken'.",
-         intention="'for' = purpose, reason, or who benefits.",
+         intention="Points at the goal or beneficiary.",
          pattern="for + purpose / for + person"),
-    dict(plane="grammar", term="by",
-         text="The cake was eaten {{c1::by}} 'nobody'.",
-         intention="'by' = the doer in a passive sentence; also 'by means of'.",
-         pattern="X was done by + agent | by + transport (by bus)",
-         note="The passive's secret author."),
-    dict(plane="grammar", term="about",
+    dict(plane="grammar",
+         rule="by → the doer in a passive · also 'by means of'",
+         text="The cake was eaten {{c1::by}} 'nobody' (by hand, apparently).",
+         intention="The passive's secret author; also transport/method.",
+         pattern="X was done by + agent | by + transport (by bus)"),
+    dict(plane="grammar",
+         rule="about → concerning / on the topic of",
          text="We need to talk {{c1::about}} your relationship with the snooze button.",
-         intention="'about' = concerning / on the topic of.",
+         intention="Marks the topic.",
          pattern="talk / think / worry about + topic"),
-    dict(plane="grammar", term="between",
+    dict(plane="grammar",
+         rule="between → in the gap separating two named things",
          text="The truth sits {{c1::between}} the menu photo and reality.",
-         intention="'between' = in the gap separating two named things.",
+         intention="Locates something in the space (or difference) dividing A and B.",
          image="A sad burger squeezed between two glossy photos.",
          pattern="between A and B"),
-    dict(plane="grammar", term="through",
+    dict(plane="grammar",
+         rule="through → in one side and out the other (space/time/process)",
          text="I got {{c1::through}} Monday on snacks alone.",
-         intention="'through' = in one side and out the other — space, time or a process.",
+         intention="Passage all the way across.",
          pattern="through + a tunnel / the week / a process"),
 
-    # ============ C. AUXILIARIES & MODALS (the tense / mood engine) ============
-    dict(plane="grammar", term="Do",
-         text="{{c1::Do}} you actually like jazz, or just the idea of it?",
-         intention="'do/does/did' build questions and negatives in the simple present/past — the verb has no other helper.",
-         pattern="Do / Does / Did + subject + base verb?",
-         note="No 'do' -> no simple-tense question or negative."),
-    dict(plane="grammar", term="don't",
-         text="I {{c1::don't}} trust stairs; they're always up to something.",
-         intention="do + not = the simple-present negative.",
-         pattern="subject + don't / doesn't + base verb"),
-    dict(plane="grammar", term="are",
+    # ============ D. THE TENSE / MOOD ENGINE (auxiliaries & modals) ============
+    dict(plane="grammar",
+         rule="do/does/did → build questions & negatives in simple present/past",
+         text=("<div class='title'>do — questions & negatives</div>"
+               "① {{c1::Do}} you actually like jazz, or just the idea of it?\n"
+               "② I {{c1::don't}} trust stairs; they're up to something.\n"
+               "③ {{c1::Does}} she know the plant is fake?\n"
+               "④ We {{c1::didn't}} plan this, it just happened."),
+         intention="The simple tenses have no other helper, so 'do' carries the question/negative.",
+         pattern="Do/Does/Did + subject + base verb? · subject + don't/doesn't/didn't + base verb",
+         note="No 'do' → no simple-tense question or negative."),
+    dict(plane="grammar",
+         rule="be + V-ing → happening now / temporary",
          text="Why {{c1::are}} you whispering to the broccoli?",
-         intention="'be' (am/is/are) + verb-ing = happening right now / temporary.",
-         pattern="be + V-ing (now / around now)"),
-    dict(plane="grammar", term="been",
-         text="I've {{c1::been}} 'about to start' for three hours.",
-         intention="have + been + -ing = started in the past and still going.",
-         pattern="have / has been + V-ing (up to now)"),
-    dict(plane="grammar", term="have",
-         text="I {{c1::have}} never met a dog I didn't immediately trust.",
-         intention="have/has + past participle = a past action with present relevance (experience, news, result now).",
-         pattern="have / has + V3 (experience / result now)",
+         intention="Present continuous: action around now, not permanent.",
+         pattern="am/is/are + V-ing (now / around now)"),
+    dict(plane="grammar",
+         rule="have + V3 → past action, present relevance (no exact time)",
+         text=("<div class='title'>present perfect vs its -ing form</div>"
+               "① I {{c1::have}} never met a dog I didn't trust.\n"
+               "② I've {{c1::been}} 'about to start' for three hours.\n"
+               "③ She {{c1::has}} finished (result: it's done now).\n"
+               "④ We've {{c1::been}} waiting since the ice age."),
+         intention="have + V3 = result/experience now; have been + -ing = started earlier and still going.",
+         pattern="have/has + V3 (result now) · have/has been + V-ing (up to now)",
          note="Links past to now; no exact time stated."),
-    dict(plane="grammar", term="was",
+    dict(plane="grammar",
+         rule="be (was/were) + V3 → passive: the receiver becomes the subject",
          text="The window {{c1::was}} broken by 'the wind' (it was me).",
-         intention="be (was/were) + past participle = passive: the receiver becomes the subject.",
-         pattern="X was + V3 (by agent)"),
-    dict(plane="grammar", term="going to",
-         text="I'm {{c1::going to}} regret this third coffee.",
-         intention="be going to + verb = a plan already decided, or an evidence-based prediction.",
-         pattern="be going to + base verb (plan / prediction)",
-         note="Plan = going to; decided right now = will."),
-    dict(plane="grammar", term="will",
-         text="Fine - I {{c1::will}} water your cactus, calm down.",
-         intention="'will' = decided this very moment, a promise, or a neutral prediction.",
-         pattern="will + base verb (decision / promise / prediction)"),
-    dict(plane="grammar", term="can",
-         text="I {{c1::can}} touch my elbow with my tongue. (I cannot.)",
-         intention="'can' = ability, or informal permission/possibility.",
-         pattern="can + base verb (able / allowed)"),
-    dict(plane="grammar", term="Could",
-         text="{{c1::Could}} you pass the chaos, please?",
-         intention="'could' = past ability, a polite request, or a soft possibility.",
-         pattern="could + base verb (polite / maybe / used to be able)"),
-    dict(plane="grammar", term="would",
-         text="A normal person {{c1::would}} stop here. I am not that person.",
-         intention="'would' = the result of an unreal/imagined situation; also politeness.",
-         pattern="would + base verb (if... / polite)",
-         note="It's the 'd in I'd, he'd, we'd."),
-    dict(plane="grammar", term="should",
-         text="You {{c1::should}} probably sleep instead of buying a kayak online.",
-         intention="'should' = advice, the right thing to do, or mild expectation.",
-         pattern="should + base verb (advice / expectation)"),
-    dict(plane="grammar", term="must",
-         text="You've read it five times - you {{c1::must}} love it.",
-         intention="'must' = strong obligation OR a confident deduction ('it's surely true').",
+         intention="Move the doer off-stage; spotlight the thing acted on.",
+         pattern="X was/were + V3 (by agent)"),
+    dict(plane="grammar",
+         rule="will → decided NOW / promise · going to → already-decided plan",
+         text=("<div class='title'>will vs going to</div>"
+               "① Fine — I {{c1::will}} water your cactus, calm down.\n"
+               "② I'm {{c1::going to}} regret this third coffee.\n"
+               "③ That glass {{c1::will}} fall — wait, it fell.\n"
+               "④ We're {{c1::going to}} paint the room on Sunday (planned)."),
+         intention="Both are future; the split is spontaneous decision vs pre-made plan/evidence.",
+         pattern="will + base verb (decision/promise) · be going to + base verb (plan/prediction)"),
+    dict(plane="grammar",
+         rule="can → ability / informal permission · could → polite / past ability / soft maybe",
+         text=("<div class='title'>can vs could</div>"
+               "① I {{c1::can}} touch my elbow with my tongue. (I cannot.)\n"
+               "② {{c1::Could}} you pass the chaos, please?\n"
+               "③ She {{c1::can}} smell a lie from space.\n"
+               "④ We {{c1::could}} leave now, or we could suffer."),
+         intention="Same family; could is softer/more distant (politeness, past, tentative possibility).",
+         pattern="can + base verb (able/allowed) · could + base verb (polite/maybe/used to be able)"),
+    dict(plane="grammar",
+         rule="must → strong obligation OR confident deduction ('surely true')",
+         text=("<div class='title'>must — two jobs</div>"
+               "① You {{c1::must}} wear shoes; it's the law of the café.\n"
+               "② You've read it five times — you {{c1::must}} love it.\n"
+               "③ I {{c1::must}} sleep. (obligation)\n"
+               "④ The lights are off; they {{c1::must}} be asleep. (deduction)"),
+         intention="Same word, two jobs: what's required, and what's almost certainly the case.",
          pattern="must + base verb (have to / surely)",
          note="The deduction sense runs half of real conversation."),
-    dict(plane="grammar", term="might",
+    dict(plane="grammar",
+         rule="should → advice/expectation · must → obligation (stronger)",
+         text=("<div class='title'>should vs must</div>"
+               "① You {{c1::should}} sleep instead of buying a kayak online.\n"
+               "② Passengers {{c1::must}} fasten their seatbelts.\n"
+               "③ You {{c1::should}} call her (good idea).\n"
+               "④ You {{c1::must}} not touch that wire (no choice)."),
+         intention="Grade of pressure: should = recommended; must = required.",
+         pattern="should + base verb (advice) · must + base verb (obligation)"),
+    dict(plane="grammar",
+         rule="might / may → uncertain, ~50/50 possibility",
          text="I {{c1::might}} go, or I might become one with the couch.",
-         intention="'might / may' = an uncertain, maybe-50/50 possibility.",
+         intention="Flag genuine uncertainty.",
          pattern="might / may + base verb (maybe)"),
+    dict(plane="grammar",
+         rule="would → result of an unreal/imagined situation · also politeness",
+         text="A normal person {{c1::would}} stop here. I am not that person.",
+         intention="The 'then' half of an imagined world; also softens requests.",
+         pattern="would + base verb (if... / polite)",
+         note="It's the 'd in I'd, he'd, we'd."),
 
-    # ============ D. GENERATIVE FRAMES (one card -> infinite sentences) ============
-    dict(plane="expression", term="There",
-         text="{{c1::There}}'s a raccoon in the lobby acting like a paying guest.",
-         intention="'there is / there are' = announce that something EXISTS or is present.",
-         pattern="There is + singular | There are + plural",
-         note="Dummy 'there' just introduces existence."),
-    dict(plane="expression", term="If",
-         text="{{c1::If}} you feed it once, it lives here now.",
-         intention="First conditional: a real future condition. if + present, then will / imperative.",
-         pattern="If + present, ... will + base verb"),
-    dict(plane="expression", term="were",
-         text="If I {{c1::were}} a cloud, I'd rain only on people who chew loudly.",
-         intention="Second conditional: an imagined / unreal present. if + past, would + base verb.",
-         pattern="If + past, would + base verb",
-         note="Use 'were' for every subject in the unreal: if I were, if he were."),
-    dict(plane="expression", term="had",
-         text="If I {{c1::had}} known, I would have stayed in bed.",
-         intention="Third conditional: regret about the unchangeable past. if + had + V3, would have + V3.",
-         pattern="If + had V3, ... would have + V3",
-         note="The grammar of regret."),
-    dict(plane="expression", term="The more",
+    # ============ E. GENERATIVE FRAMES (one card → infinite sentences) ============
+    dict(plane="expression",
+         rule="1st → real future · 2nd → unreal now · 3rd → impossible past (regret)",
+         text=("<div class='title'>the three conditionals</div>"
+               "① {{c1::If}} you feed it once, it lives here now. (real)\n"
+               "② If I {{c1::were}} a cloud, I'd rain on loud chewers. (unreal now)\n"
+               "③ If I {{c1::had}} known, I would have stayed in bed. (past)"),
+         intention="One ladder of distance from reality: real → imagined present → unchangeable past.",
+         pattern="If + present, will... · If + past, would... · If + had V3, would have V3",
+         note="Use 'were' for every subject in the 2nd: if I were, if he were."),
+    dict(plane="expression",
+         rule="The more X, the more Y → two things rise together",
          text="{{c1::The more}} I tidy, the more the cat un-tidies.",
-         intention="Link two things that rise together — elegant and endlessly reusable.",
+         intention="Link two rising quantities elegantly and endlessly.",
          image="A seesaw where, impossibly, both sides go up.",
-         pattern="The more X, the more Y (the + comparative, the + comparative)"),
-    dict(plane="expression", term="used to",
+         pattern="The + comparative X, the + comparative Y"),
+    dict(plane="expression",
+         rule="used to → past habit/state that is no longer true",
          text="I {{c1::used to}} have hobbies; now I have browser tabs.",
-         intention="'used to' = a past habit or state that is no longer true.",
+         intention="Mark a discontinued past routine.",
          pattern="used to + base verb (past habit, now stopped)"),
-    dict(plane="expression", term="rather",
-         text="I'd {{c1::rather}} fight a goose than reply to that email.",
-         intention="'would rather' = prefer one option over another.",
-         pattern="'d rather + base verb (than...)"),
-    dict(plane="expression", term="better",
-         text="You'd {{c1::better}} hide the snacks before he arrives.",
-         intention="'had better' = strong advice / warning, with a hint of 'or else'.",
-         pattern="'d better + base verb (or there's trouble)"),
+    dict(plane="expression",
+         rule="'d rather → prefer · 'd better → strong warning (or else)",
+         text=("<div class='title'>would rather vs had better</div>"
+               "① I'd {{c1::rather}} fight a goose than reply to that email.\n"
+               "② You'd {{c1::better}} hide the snacks before he arrives.\n"
+               "③ I'd {{c1::rather}} stay in.\n"
+               "④ We'd {{c1::better}} leave now, or we'll miss it."),
+         intention="Both are 'd + word, but one states a preference, the other a threat-tinged urgency.",
+         pattern="'d rather + base verb (than...) · 'd better + base verb (or trouble)"),
 
-    # ============ E. BASIC CONNECTORS (join ideas so they flow) ============
-    dict(plane="connector", term="and",
-         text="I came for closure {{c1::and}} stayed for the snacks.",
-         intention="'and' = add or sequence — the simplest glue.",
-         pattern="X and Y (add)"),
-    dict(plane="connector", term="but",
-         text="The plan was perfect, {{c1::but}} reality showed up.",
-         intention="'but' = contrast / an unexpected turn.",
-         pattern="X, but Y (contrast)"),
-    dict(plane="connector", term="so",
-         text="The floor was wet, {{c1::so}} I performed an unplanned dance.",
-         intention="'so' = therefore — the result of the previous clause.",
-         pattern="X, so Y (result)"),
-    dict(plane="connector", term="because",
-         text="I'm whispering {{c1::because}} the toddler finally slept.",
-         intention="'because' = the reason / cause behind something.",
-         pattern="Y because X (effect because cause)",
+    # ============ F. CONNECTORS (join ideas so they flow) ============
+    dict(plane="connector",
+         rule="and → add · but → contrast · or → alternative",
+         text=("<div class='title'>and / but / or</div>"
+               "① I came for closure {{c1::and}} stayed for the snacks.\n"
+               "② The plan was perfect, {{c1::but}} reality showed up.\n"
+               "③ Choose: your dignity {{c1::or}} the last slice."),
+         intention="The three basic joins: pile on, turn against, offer a fork.",
+         pattern="X and Y · X but Y · X or Y"),
+    dict(plane="connector",
+         rule="because → the cause · so → the result (mirror images)",
+         text=("<div class='title'>because vs so</div>"
+               "① I'm whispering {{c1::because}} the toddler finally slept.\n"
+               "② The floor was wet, {{c1::so}} I did an unplanned dance.\n"
+               "③ We left early {{c1::because}} the band was loud.\n"
+               "④ The band was loud, {{c1::so}} we left early."),
+         intention="Same causal link, opposite order: effect ← because ← cause · cause → so → effect.",
+         pattern="Y because X (cause after) · X, so Y (result after)",
          note="because + clause; because OF + noun."),
-    dict(plane="connector", term="Although",
-         text="{{c1::Although}} the cake collapsed, morale did not.",
-         intention="'although' = concede a fact that doesn't stop your main point.",
-         pattern="Although + clause, main clause",
-         synonyms="even though, though"),
-    dict(plane="connector", term="When",
-         text="{{c1::When}} the music stops, everyone pretends they were working.",
-         intention="'when' = at the time that / whenever.",
-         pattern="When X happens, Y"),
-    dict(plane="connector", term="while",
-         text="I meditate {{c1::while}} the smoke alarm sings backup.",
-         intention="'while' = during / at the same time; also a soft contrast.",
-         pattern="while + clause (during / whereas)"),
-    dict(plane="connector", term="or",
-         text="Choose: your dignity {{c1::or}} the last slice.",
-         intention="'or' = an alternative / the other option.",
-         pattern="X or Y (choice)"),
-    dict(plane="connector", term="that",
+    dict(plane="connector",
+         rule="although → concede a fact · while → during / whereas",
+         text=("<div class='title'>although vs while</div>"
+               "① {{c1::Although}} the cake collapsed, morale did not.\n"
+               "② I meditate {{c1::while}} the smoke alarm sings backup.\n"
+               "③ {{c1::Although}} it's cheap, it works.\n"
+               "④ She cooked {{c1::while}} he 'supervised'."),
+         intention="although = surprise/concession; while = same-time (or soft contrast).",
+         pattern="Although + clause, main · while + clause (during / whereas)",
+         synonyms="although → even though, though"),
+    dict(plane="connector",
+         rule="when → at the time that (a point) · while → during (a stretch)",
+         text=("<div class='title'>when vs while</div>"
+               "① {{c1::When}} the music stops, everyone pretends to work.\n"
+               "② {{c1::While}} the music played, chaos reigned.\n"
+               "③ Call me {{c1::when}} you land. (moment)\n"
+               "④ Don't text {{c1::while}} you drive. (during)"),
+         intention="when points at a moment/trigger; while stretches over a duration.",
+         pattern="When X happens, Y · while + ongoing action"),
+    dict(plane="connector",
+         rule="that → links a reported thought/fact to know/think/say",
          text="I knew {{c1::that}} the silence was suspicious.",
-         intention="'that' = links a reported thought/fact to verbs like know, think, say.",
+         intention="Introduces the content of a thought or report.",
          pattern="think / know / say (that) + clause",
          note="Often droppable: 'I knew the silence was...'."),
 
-    # ============ F. LIGHT VERBS (the few verbs that do most of the work) ============
-    dict(plane="verb-construction", term="get",
+    # ============ G. LIGHT VERBS (the few verbs that do most of the work) ============
+    dict(plane="verb-construction",
+         rule="make → produce / cause · do → perform a task",
+         text=("<div class='title'>make vs do</div>"
+               "① Please {{c1::make}} it make sense.\n"
+               "② I'll {{c1::do}} the dishes right after doing nothing.\n"
+               "③ Don't {{c1::make}} me a promise you'll break.\n"
+               "④ Could you {{c1::do}} me a favour?"),
+         intention="make builds/causes something; do carries out an activity.",
+         pattern="make + a decision/sense · make someone + adj/verb · do + the dishes/homework/a favour"),
+    dict(plane="verb-construction",
+         rule="get → obtain / become / arrive / cause-to-be (Swiss-army verb)",
          text="Let's {{c1::get}} this over with before I overthink it.",
-         intention="'get' = obtain, become, arrive, or cause-to-be — the Swiss-army verb.",
-         pattern="get + thing / adjective / place (get coffee / get tired / get home)",
-         note="If you can't find the verb, it's probably 'get'."),
-    dict(plane="verb-construction", term="make",
-         text="Please {{c1::make}} it make sense.",
-         intention="'make' = create / produce, or force/cause someone to do or feel.",
-         pattern="make + a decision / sense | make someone + adj/verb",
-         note="make = produce/cause; do = perform a task."),
-    dict(plane="verb-construction", term="take",
+         intention="If you can't find the verb, it's probably 'get'.",
+         pattern="get + thing / adjective / place (get coffee / get tired / get home)"),
+    dict(plane="verb-construction",
+         rule="take → require time/effort, or grab/perform set actions",
          text="This will {{c1::take}} forever and at least two snacks.",
-         intention="'take' = require time/effort, or grab/perform set actions.",
+         intention="Duration or a fixed action-chunk.",
          pattern="take + time / a look / care / a break"),
-    dict(plane="verb-construction", term="do",
-         text="I'll {{c1::do}} the dishes right after I finish doing nothing.",
-         intention="'do' (main verb) = perform an activity, task or job.",
-         pattern="do + the dishes / homework / a favour",
-         note="do = perform; make = produce."),
-    dict(plane="verb-construction", term="going",
-         text="This conversation is {{c1::going}} nowhere, beautifully.",
-         intention="'go' = move away from here, or 'become' (go bad, go quiet, go viral).",
-         pattern="go + place | go + adjective (go cold)"),
-    dict(plane="verb-construction", term="have a look",
+    dict(plane="verb-construction",
+         rule="have → possess, or 'experience/do' inside set chunks",
          text="Let's {{c1::have a look}} before we panic.",
-         intention="'have' = possess, or 'experience/do' inside set chunks.",
+         intention="Beyond possession: have packages many small experiences.",
          pattern="have + a look / a rest / a shower / breakfast"),
-    dict(plane="verb-construction", term="Give",
+    dict(plane="verb-construction",
+         rule="go → move away from here, or 'become' (go bad, go viral)",
+         text="This conversation is {{c1::going}} nowhere, beautifully.",
+         intention="Motion, or a change of state (usually for the worse).",
+         pattern="go + place · go + adjective (go cold / go quiet)"),
+    dict(plane="verb-construction",
+         rule="give → transfer to someone (spawns give up, give a hand)",
          text="{{c1::Give}} me one good reason and the cookie is yours.",
-         intention="'give' = transfer something to someone; spawns idioms (give up, give a hand).",
+         intention="Hand something over; a phrasal-verb factory.",
          pattern="give + someone + something"),
-    dict(plane="verb-construction", term="Keep",
+    dict(plane="verb-construction",
+         rule="keep + V-ing → continue / don't stop",
          text="{{c1::Keep}} pretending you didn't see the mess.",
-         intention="'keep' = continue / maintain. keep + -ing = don't stop.",
+         intention="Maintain an ongoing action.",
          pattern="keep + V-ing (continue)"),
-    dict(plane="verb-construction", term="Let",
+    dict(plane="verb-construction",
+         rule="let + someone + base verb → allow / permit",
          text="{{c1::Let}} it go before it lives in your head rent-free.",
-         intention="'let' = allow / permit.",
+         intention="Grant permission or release.",
          pattern="let + someone + base verb"),
-    dict(plane="verb-construction", term="want",
-         text="I {{c1::want}} the outcome but not the process.",
-         intention="'want' = desire; 'need' = require. Both take to + verb.",
+    dict(plane="verb-construction",
+         rule="want / need + to + base verb → desire vs requirement",
+         text="I {{c1::want}} the outcome but I don't need the process.",
+         intention="want = desire; need = require. Both take to + verb.",
          pattern="want / need + to + base verb"),
 
-    # ============ G. NEGATION, QUANTITY & FREQUENCY (invert / grade) ============
-    dict(plane="grammar", term="not",
-         text="I'm {{c1::not}} arguing; I'm just loudly correct.",
-         intention="'not' negates; it contracts onto the auxiliary (isn't, don't, won't).",
-         pattern="auxiliary + not + verb"),
-    dict(plane="grammar", term="nothing",
-         text="I have {{c1::nothing}} to declare except glitter and regret.",
-         intention="'nothing / nobody / never' are already negative — don't add a second 'not'.",
-         pattern="nothing / nobody / never (built-in negative)",
-         note="Double negative trap: 'I don't have nothing' is wrong."),
-    dict(plane="grammar", term="never",
-         text="I {{c1::never}} cry at movies. (I always cry at movies.)",
-         intention="'never' = at no time. It sits before the main verb.",
-         pattern="subject + never + main verb"),
-    dict(plane="grammar", term="always",
-         text="I {{c1::always}} say I'll start on Monday.",
-         intention="Frequency adverbs (always > usually > often > sometimes > never) go before the main verb, but after 'be'.",
-         pattern="subject + [freq] + verb | be + [freq]"),
-    dict(plane="grammar", term="too",
-         text="It's {{c1::too}} hot to function, and so I won't.",
-         intention="Degree words: very = a lot (neutral); too = more than is okay (a problem); so = very, with feeling.",
-         pattern="too + adj (to...) | so + adj (that...)",
-         note="too = a problem; very = neutral; so = intense."),
-    dict(plane="grammar", term="yet",
-         text="Are we there {{c1::yet}}? We haven't even left.",
-         intention="already = sooner than expected (+); yet = so far, in questions/negatives; still = continuing.",
-         pattern="already (+) | yet (? / -) | still (ongoing)"),
-    dict(plane="grammar", term="just",
-         text="I {{c1::just}} finished - like, ten seconds ago.",
-         intention="'just' = a moment ago, or 'only / simply'. Tiny word, big nuance.",
-         pattern="have just + V3 (recent) | just = only"),
+    # ============ H. NEGATION, DEGREE & TIMING (invert / grade) ============
+    dict(plane="grammar",
+         rule="one negative per clause — nothing/never/nobody are ALREADY negative",
+         text=("<div class='title'>negation — no double negatives</div>"
+               "① I'm {{c1::not}} arguing; I'm just loudly correct.\n"
+               "② I have {{c1::nothing}} to declare but glitter and regret.\n"
+               "③ I {{c1::never}} cry at movies. (I always do.)\n"
+               "④ {{c1::Nobody}} touched the last slice. (not: didn't touch nobody)"),
+         intention="'not' rides the auxiliary; the -thing/-body/never words carry their own negative.",
+         pattern="aux + not + verb · nothing/nobody/never (built-in negative)",
+         note="Trap: 'I don't have nothing' is wrong — pick one negative."),
+    dict(plane="grammar",
+         rule="frequency (always>usually>often>sometimes>never): before main verb, after 'be'",
+         text=("<div class='title'>frequency adverb placement</div>"
+               "① I {{c1::always}} say I'll start on Monday.\n"
+               "② She is {{c1::never}} late, somehow.\n"
+               "③ We {{c1::usually}} forget the umbrella.\n"
+               "④ He is {{c1::often}} right, annoyingly."),
+         intention="Position is the rule: squeeze before the main verb, but sit after 'be'.",
+         pattern="subject + [freq] + main verb · be + [freq]"),
+    dict(plane="grammar",
+         rule="very → neutral 'a lot' · too → a problem · so → intense, with feeling",
+         text=("<div class='title'>very / too / so</div>"
+               "① It's {{c1::too}} hot to function, so I won't.\n"
+               "② The soup is {{c1::very}} good, thanks.\n"
+               "③ I'm {{c1::so}} tired that I dreamt standing up.\n"
+               "④ This box is {{c1::too}} heavy to lift."),
+         intention="Grade an adjective by attitude: neutral, problem, or emotional intensity.",
+         pattern="too + adj (to...) · very + adj (neutral) · so + adj (that...)"),
+    dict(plane="grammar",
+         rule="already → sooner than expected(+) · yet → so far(?/–) · still → continuing",
+         text=("<div class='title'>already / yet / still</div>"
+               "① You've {{c1::already}} eaten? It's 9am.\n"
+               "② Are we there {{c1::yet}}? We haven't left.\n"
+               "③ I {{c1::still}} haven't started, classic.\n"
+               "④ Has it finished {{c1::yet}}?"),
+         intention="Three timing lenses on an expected event.",
+         pattern="already (+) · yet (? / –) · still (ongoing)"),
+    dict(plane="grammar",
+         rule="just → a moment ago (have just V3), or 'only / simply'",
+         text="I {{c1::just}} finished — like, ten seconds ago.",
+         intention="Tiny word, big nuance: recency or minimisation.",
+         pattern="have just + V3 (recent) · just = only"),
 
-    # ============ H. WH- QUESTIONS (open the missing information) ============
-    dict(plane="grammar", term="What",
-         text="{{c1::What}} is that noise, and why is it friendly?",
-         intention="'what' = ask for a thing or information from an open set.",
-         pattern="What + (aux) + subject + verb?"),
-    dict(plane="grammar", term="Why",
-         text="{{c1::Why}} is the printer always hungry on deadlines?",
-         intention="'why' = ask for the reason.",
-         pattern="Why + aux + subject + verb? -> Because..."),
-    dict(plane="grammar", term="How",
-         text="{{c1::How}} did the goat get on the roof? We may never know.",
-         intention="'how' = ask the manner/method; also how + adjective (how far / long / old).",
-         pattern="How + (adj) + aux + subject + verb?"),
-    dict(plane="grammar", term="Where",
-         text="{{c1::Where}} did my twenties go?",
-         intention="where = place, when = time, who = person — the info-gap openers.",
-         pattern="Wh- + aux + subject + verb?"),
-    dict(plane="grammar", term="Whose",
-         text="{{c1::Whose}} idea was the indoor slip-n-slide?",
-         intention="'whose' = ask about possession; 'which' = choose from a known set.",
-         pattern="Whose + noun? | Which + noun (of these)?"),
+    # ============ I. WH- QUESTIONS (open the missing information) ============
+    dict(plane="grammar",
+         rule="what → thing · why → reason · how → manner · where → place · whose → owner",
+         text=("<div class='title'>wh- questions</div>"
+               "① {{c1::What}} is that noise, and why is it friendly?\n"
+               "② {{c1::Why}} is the printer always hungry on deadlines?\n"
+               "③ {{c1::How}} did the goat get on the roof?\n"
+               "④ {{c1::Where}} did my twenties go?\n"
+               "⑤ {{c1::Whose}} idea was the indoor slip-n-slide?"),
+         intention="Each wh- word opens a specific information gap; the frame after it stays the same.",
+         pattern="Wh- + (aux) + subject + verb?  ·  Whose/Which + noun ...?",
+         note="how also pairs with adjectives: how far / long / old."),
 ]
 
 if __name__ == "__main__":
