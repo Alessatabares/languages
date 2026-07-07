@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✍️ Gimnasio de producción · Sorcière A2 · la escalera de frases</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#161d2e; --panel2:#1d2740; --line:#2a3550;
+    --ink:#e7ecf5; --mut:#93a0bd; --blue:#3b82f6; --teal:#0ea5a4;
+    --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --violet:#8b5cf6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    background:linear-gradient(180deg,#0c111c,#0f1420);color:var(--ink);line-height:1.5}
+  header{padding:14px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;letter-spacing:.3px}
+  header .sub{color:var(--mut);font-size:12.5px}
+  .prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mut)}
+  .bar{width:150px;height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));transition:width .4s}
+
+  .wrap{max-width:760px;margin:0 auto;padding:20px 22px 60px}
+
+  .topnav{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .topnav select{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    padding:8px 10px;border-radius:9px;font-size:13px;max-width:240px}
+  button.ghost{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:8px 13px;border-radius:8px;cursor:pointer;font-size:12.5px}
+  button.ghost:hover{background:var(--line)}
+  button.act{background:var(--blue);border:none;color:#fff;padding:8px 15px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600}
+  button.act:hover{filter:brightness(1.1)}
+  .spacer{flex:1}
+
+  .plane{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+    padding:3px 9px;border-radius:99px;background:rgba(139,92,246,.14);border:1px solid var(--violet);color:#ddd6fe;margin-bottom:10px}
+  .term{font-size:30px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;color:#bfdbfe;margin:0 0 4px}
+  .wordn{font-size:11.5px;color:var(--mut);margin-bottom:14px}
+  .support{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:8px;font-size:13.5px}
+  .support .row{margin:5px 0}
+  .support .k{color:var(--teal);font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;margin-right:7px}
+  .support .mean{color:#bfdbfe;font-weight:600}
+  .support .syn{color:#a7f3d0;font-family:ui-monospace,monospace;font-size:12.5px}
+  .support .ojo{color:#fcd34d}
+  .rule{font-size:12px;color:var(--amber);margin:12px 2px 18px;padding:9px 12px;background:rgba(245,158,11,.09);border:1px dashed rgba(245,158,11,.4);border-radius:9px}
+
+  .rung{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;position:relative}
+  .rung.done{border-color:var(--green)}
+  .rung .head{display:flex;align-items:baseline;gap:9px;margin-bottom:3px}
+  .rung .num{font-size:12px;color:var(--mut);font-weight:700}
+  .rung .name{font-size:15px;font-weight:700}
+  .rung.r1 .name{color:#93c5fd} .rung.r2 .name{color:#7dd3fc}
+  .rung.r3 .name{color:#5eead4} .rung.r4 .name{color:#c4b5fd} .rung.r5 .name{color:#f0abfc}
+  .rung .def{font-size:13px;color:var(--mut);margin:2px 0 8px}
+  .rung .ex{font-size:12.5px;color:#cbd5e1;background:#0a1020;border-left:3px solid var(--line);padding:7px 11px;border-radius:0 7px 7px 0;margin-bottom:10px;font-style:italic}
+  .rung .ex b{color:var(--teal);font-style:normal;font-weight:600}
+  textarea.write{width:100%;min-height:52px;background:#0a1020;border:1px solid var(--line);color:#e7ecf5;
+    font-family:inherit;font-size:14px;padding:10px 12px;border-radius:9px;outline:none;resize:vertical;line-height:1.5}
+  textarea.write:focus{border-color:var(--blue)}
+  .rung .foot{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--mut)}
+  .rung .foot label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+  .rung .foot .saved{color:var(--green);opacity:0;transition:.3s}
+  .rung .foot .saved.show{opacity:1}
+
+  .exportbar{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(15,20,32,0),var(--bg) 40%);
+    padding:16px 0 4px;margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .hintmini{font-size:11.5px;color:var(--mut)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--green);color:#062611;
+    padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.25s}
+  .toast.show{opacity:1}
+  details.how{margin-bottom:16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:2px 14px}
+  details.how summary{cursor:pointer;font-size:13px;color:var(--teal);padding:9px 0;font-weight:600}
+  details.how p{font-size:13px;color:var(--mut);margin:6px 0 12px}
+  details.how ol{font-size:13px;color:var(--ink);margin:0 0 12px;padding-left:20px}
+  details.how li{margin:4px 0}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>✍️ Gimnasio de producción · Sorcière A2</h1>
+    <div class="sub">Convierte cada palabra en frases <b>tuyas</b> — de lo simple a lo conectado. No la reconozcas: prodúcela.</div>
+  </div>
+  <div class="prog">
+    <button class="ghost" id="reset" title="Borrar todo">reiniciar</button>
+    <span id="progtxt">0 / 0</span>
+    <div class="bar"><i id="progbar"></i></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <details class="how">
+    <summary>Cómo funciona (léelo una vez) ▾</summary>
+    <p>Anki te enseñó a <b>reconocer</b> estas palabras. Este gimnasio entrena a <b>producirlas</b>: sacar la palabra de una situación y armar una frase correcta, rápido. Las mismas 5 escaleras para cada palabra — subes de lo fácil a lo conectado.</p>
+    <ol>
+      <li><b>Escribe</b> una frase por escalón, en TU vida (regla: no copies la frase del cuento).</li>
+      <li>Clic en <b>Exportar</b> → tus frases se copian, ordenadas.</li>
+      <li>Pégalas en tu chat de tutor → te las corrijo (gramática, <b>género</b>, naturalidad).</li>
+      <li>Pega la versión corregida en la caja y marca <b>corregida ✓</b>. Queda guardada.</li>
+    </ol>
+    <p>La misma palabra neutra (<i>le café</i>) sube los 5 escalones, para que veas la <b>mecánica</b> de cada tipo de frase. No la copies — copia el <i>movimiento</i>.</p>
+    <p style="color:#7dd3fc">Ojo: tu deck de inglés es C2, así que allá la escalera es de <i>humor</i>. Este es A2: primero hay que producir frases simples y correctas. El humor llegará cuando tu francés suba — misma escalera, altura distinta.</p>
+  </details>
+
+  <div class="topnav">
+    <button class="ghost" id="prev">← anterior</button>
+    <select id="jump"></select>
+    <button class="ghost" id="next">siguiente →</button>
+  </div>
+
+  <div id="card"></div>
+
+  <div class="exportbar">
+    <button class="act" id="expOne">⧉ Exportar las frases de esta palabra</button>
+    <button class="ghost" id="expAll">⧉ Exportar todo lo que escribí</button>
+    <span class="hintmini">→ pégalo en tu chat de tutor para corregir</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---- escalera A2 (fija): tipos de frase, no humor ---- palabra neutra 'le café' subiendo ---- */
+const RUNGS = [
+  {name:"Frase simple y verdadera", def:"Una frase corta y real con la palabra. Clava el uso básico y el género (un/une, le/la).",
+   ex:"<b>Simple:</b> Je bois un café le matin."},
+  {name:"Una pregunta", def:"Haz una pregunta con la palabra (Est-ce que… ? / Tu veux… ? / Où… ?).",
+   ex:"<b>Pregunta:</b> Est-ce que tu veux un café ?"},
+  {name:"La negación", def:"Ponla en negativo con ne… pas. Ojo: tras negación, un/une/du → de (pas de café).",
+   ex:"<b>Negación:</b> Je ne bois pas de café le soir."},
+  {name:"Pasado o futuro", def:"Estírala a otro tiempo: pasado (j'ai bu / je buvais) o futuro (je vais boire / je boirai).",
+   ex:"<b>Pasado:</b> Hier, j'ai bu trop de café."},
+  {name:"Mini-historia (2 frases)", def:"Dos frases cortas que se conectan: una escena mínima con la palabra. Integrar es el escalón alto.",
+   ex:"<b>Mini-historia:</b> Le café est froid. Je le mets au micro-ondes."},
+];
+
+/* ---- deck francés real · sorcière rue Mouffetard (A2) · término · significado · para qué · imagen/patrón · ojo ---- */
+const DATA = [
+  {t:"sorcière",pl:"vocab",m:"a witch",j:"La villana del cuento; sustantivo básico de cuento de hadas.",img:"Sombrero negro puntiagudo, una escoba, una olla que hierve.",note:"Femenino: UNE sorcière."},
+  {t:"placard",pl:"vocab",m:"cupboard / closet",j:"Palabra de casa — donde guardas platos, comida o ropa.",img:"Abrir la puerta de un armario de cocina.",note:"Masculino: UN placard."},
+  {t:"tapis",pl:"vocab",m:"rug / carpet",j:"Palabra básica de mobiliario; 'sous le tapis' = bajo la alfombra.",img:"Una alfombra en el suelo donde esconder algo debajo."},
+  {t:"marché",pl:"vocab",m:"(food) market",j:"Donde compras comida fresca; 'faire son marché' = hacer la compra.",img:"Puestos al aire libre de frutas y verduras.",note:"Masculino: le marché."},
+  {t:"sauce tomate",pl:"vocab",m:"tomato sauce",j:"Vocabulario de comida; '… à la sauce tomate' = … en salsa de tomate.",img:"Una olla roja de salsa para los espaguetis."},
+  {t:"pomme",pl:"vocab",m:"an apple",j:"Palabra de fruta básica (A1).",img:"Una manzana roja brillante en tu mano.",note:"Femenino: une pomme. (pomme de terre = patata.)"},
+  {t:"poisson",pl:"vocab",m:"fish",j:"Palabra de comida / mercado.",img:"Un pescado fresco sobre hielo en el mercado.",note:"Masculino: le poisson."},
+  {t:"poulet",pl:"vocab",m:"chicken",j:"Palabra de comida / mercado.",img:"Un pollo asado.",note:"Masculino: le poulet."},
+  {t:"viande",pl:"vocab",m:"meat",j:"Palabra de comida / mercado.",img:"El mostrador de una carnicería.",note:"Femenino: la viande."},
+  {t:"laide",pl:"vocab",m:"ugly (feminine)",j:"Adjetivo básico de descripción; lo opuesto de beau/belle.",img:"La bruja frunciendo el ceño en un espejo roto.",note:"laid (m.) / laide (f.). Aquí con 'vieille' = vieja."},
+  {t:"jolie",pl:"vocab",m:"pretty (feminine)",j:"Adjetivo de cumplido cotidiano.",img:"Una cara joven, luminosa, sonriente.",syn:"belle",note:"joli (m.) / jolie (f.). Con 'jeune' = joven."},
+  {t:"grand-mère",pl:"vocab",m:"grandmother (also to address any old woman)",j:"Palabra de familia; también forma de dirigirse a una señora mayor.",img:"Una amable señora mayor con su cesta de compra.",note:"Femenino: la grand-mère. (grand-père = abuelo.)"},
+  {t:"four",pl:"vocab",m:"oven",j:"Palabra de cocina; 'au four' = al horno.",img:"Meter un asado en un horno caliente.",note:"Masculino: le four."},
+  {t:"lourd",pl:"vocab",m:"heavy",j:"Adjetivo básico de peso; opuesto de léger (ligero).",img:"Brazos que se tensan bajo una caja pesada.",note:"lourd (m.) / lourde (f.)."},
+  {t:"monnaie",pl:"vocab",m:"(small) change, coins",j:"Palabra de compras — las monedas que te devuelven.",img:"Un puñado de monedas.",note:"FALSO AMIGO: no es 'money' (= l'argent), sino cambio/monedas."},
+  {t:"aveugle",pl:"vocab",m:"blind",j:"Adjetivo útil; aquí el disfraz de Bachir.",img:"Una persona con un bastón blanco.",note:"Misma forma m. y f.: aveugle."},
+  {t:"il y a",pl:"verb-construction",m:"there is / there are",j:"LA estructura A1 más útil para decir qué existe.",pat:"il y a + sustantivo (singular O plural)",note:"Invariable — igual para uno o muchos."},
+  {t:"il me faut",pl:"verb-construction",m:"I need",j:"Expresar una necesidad — muy común.",pat:"il faut + infinitivo (hay que) | il me/te faut + sustantivo (necesito)",note:"Del verbo 'falloir'."},
+  {t:"je voudrais",pl:"verb-construction",m:"I would like",j:"La forma educada de pedir algo en una tienda. Úsala en todas partes.",pat:"je voudrais + sustantivo / + infinitivo",note:"Condicional de 'vouloir'; más suave que 'je veux' (quiero)."},
+  {t:"faire les courses",pl:"verb-construction",m:"to do the shopping",j:"Expresión fija con 'faire' para la compra.",pat:"faire les / ses courses = hacer la compra",note:"faisait = imperfecto (estaba haciendo)."},
+  {t:"aller chercher",pl:"verb-construction",m:"to go and get / fetch",j:"Dos verbos juntos para 'ir a buscar' algo.",pat:"aller chercher + sustantivo | venir chercher = venir a buscar",note:"Literal 'ir a buscar'."},
+  {t:"rendre service",pl:"verb-construction",m:"to do (someone) a favour",j:"Forma educada de pedir ayuda.",pat:"rendre service à quelqu'un = hacer un favor a alguien"},
+  {t:"un coup de main",pl:"verb-construction",m:"a hand / a bit of help (informal)",j:"Modismo amistoso para ofrecer o pedir ayuda.",pat:"donner un coup de main (à qqn) = echar una mano"},
+  {t:"habitait",pl:"grammar",m:"(there) lived / used to live",j:"Imperfecto — el pasado para describir y dar fondo en un cuento.",pat:"raíz + -ais/-ait/-ions/-aient (habitait, était, faisait…)",note:"Imperfecto para la escena; passé composé para hechos puntuales."},
+  {t:"ne bouge pas",pl:"grammar",m:"I'm not moving / I won't budge",j:"Negación básica alrededor de un verbo.",pat:"ne + verbo + pas",note:"En habla casual el 'ne' se cae: 'je bouge pas'."},
+  {t:"n'avez qu'à",pl:"grammar",m:"you just have to / you only need to",j:"Decirle a alguien la cosa simple que debe hacer — algo brusco.",pat:"n'avoir qu'à + infinitivo (je n'ai qu'à, tu n'as qu'à…)",note:"De 'ne … que' = solo."},
+  {t:"Gardez",pl:"grammar",m:"keep (it) — command, 'vous'",j:"Dar una orden o instrucción.",pat:"imperativo = el verbo SIN sujeto (Gardez ! Donnez ! Approche !)",note:"'vous' termina en -ez; el 'tu' informal suele perder la -s (Approche)."},
+  {t:"je serai",pl:"grammar",m:"I will be",j:"Hablar del futuro.",pat:"futuro simple: je serai, tu seras, il sera… (être)",note:"Mismo tiempo: j'irai = iré (aller)."},
+  {t:"Au secours",pl:"expression",m:"Help!",j:"Lo que gritas en peligro.",note:"Grito fijo; literal 'al rescate'."},
+  {t:"Ça y est",pl:"expression",m:"That's it / done / got it",j:"Marcar que algo terminó o acaba de pasar.",note:"Muy común al hablar."},
+  {t:"tant pis",pl:"expression",m:"too bad / never mind / oh well",j:"Encogerse de hombros ante algo que no salió.",note:"Opuesto: tant mieux = mejor así."},
+  {t:"Zut",pl:"expression",m:"Darn! / Dang!",j:"Expresión suave de fastidio (apta para niños).",note:"'c'est raté' = falló / no funcionó."},
+  {t:"ce n'est pas la peine",pl:"expression",m:"no need / it's not worth it",j:"Rechazar educadamente un ofrecimiento.",pat:"ce n'est pas la peine de + infinitivo"},
+  {t:"D'accord",pl:"expression",m:"OK / agreed / alright",j:"Aceptar o estar de acuerdo.",syn:"entendu, ça marche"},
+  {t:"Bien sûr",pl:"expression",m:"of course / certainly",j:"Confirmar con fuerza.",note:"'bien sûr que non' = claro que no."},
+  {t:"tout de suite",pl:"expression",m:"right away / immediately",j:"Decir cuándo pasa algo — ahora.",note:"'pas tout de suite' = ahora no."},
+  {t:"Le lendemain",pl:"expression",m:"the next day",j:"Conector de tiempo para contar una historia.",syn:"le jour suivant",note:"'ce jour-là' = ese día."},
+  {t:"Grâce à",pl:"expression",m:"thanks to / because of (positive)",j:"Dar la causa (buena) de algo.",pat:"grâce à + sustantivo",note:"Causa negativa: à cause de."},
+  {t:"enfin",pl:"expression",m:"finally / at last",j:"Expresar alivio de que algo pasó tras una espera.",syn:"finalement"},
+  {t:"voilà",pl:"expression",m:"here you are / there it is",j:"Entregar o señalar algo. Una de las palabras más útiles del francés.",note:"'tenez/tiens' = toma; 'voici' = aquí está (presentando)."},
+];
+
+/* ---------------- motor ---------------- */
+const KEY="prod-sorciere-v1";
+let store = load();
+let cur = 0;
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(store)); }
+function cell(ci,ri){ return (store[ci]&&store[ci][ri]) || {text:"",ok:false}; }
+function setCell(ci,ri,obj){ if(!store[ci])store[ci]={}; store[ci][ri]=obj; save(); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+const $=id=>document.getElementById(id);
+
+function buildJump(){
+  const sel=$("jump"); sel.innerHTML="";
+  DATA.forEach((d,i)=>{
+    const written = store[i] ? Object.values(store[i]).filter(c=>c.text&&c.text.trim()).length : 0;
+    const o=document.createElement("option");
+    o.value=i; o.textContent=`${i+1}. ${d.t}${written?`  (${written}/5)`:""}`;
+    sel.appendChild(o);
+  });
+  sel.value=cur;
+}
+
+function render(){
+  const d=DATA[cur];
+  let supp = `<div class="row"><span class="k">significado</span><span class="mean">${esc(d.m)}</span></div>`;
+  supp += `<div class="row"><span class="k">para qué sirve</span>${esc(d.j)}</div>`;
+  if(d.img) supp += `<div class="row"><span class="k">imagen mental</span>${esc(d.img)}</div>`;
+  if(d.pat) supp += `<div class="row"><span class="k">patrón</span><span class="syn">${esc(d.pat)}</span></div>`;
+  if(d.syn) supp += `<div class="row"><span class="k">sinónimos</span><span class="syn">${esc(d.syn)}</span></div>`;
+  if(d.note) supp += `<div class="row"><span class="k">ojo</span><span class="ojo">${esc(d.note)}</span></div>`;
+
+  let rungsHtml="";
+  RUNGS.forEach((r,ri)=>{
+    const c=cell(cur,ri);
+    rungsHtml += `
+     <div class="rung r${ri+1} ${c.ok?'done':''}" data-ri="${ri}">
+       <div class="head"><span class="num">${ri+1}</span><span class="name">${r.name}</span></div>
+       <div class="def">${r.def}</div>
+       <div class="ex">${r.ex}</div>
+       <textarea class="write" data-ri="${ri}" placeholder="Tu frase con “${esc(d.t)}” — de tu vida, no del cuento…">${esc(c.text)}</textarea>
+       <div class="foot">
+         <label><input type="checkbox" data-ri="${ri}" ${c.ok?'checked':''}> corregida ✓</label>
+         <span class="saved" data-ri="${ri}">guardado</span>
+       </div>
+     </div>`;
+  });
+
+  $("card").innerHTML = `
+    <div class="plane">${d.pl}</div>
+    <div class="term">${esc(d.t)}</div>
+    <div class="wordn">palabra ${cur+1} de ${DATA.length}</div>
+    <div class="support">${supp}</div>
+    <div class="rule">✋ Una regla: <b>no copies la frase del cuento.</b> Mete la palabra en TU vida — tu día, tu cocina, el mercado, tu familia. Cámbiala de sitio.</div>
+    ${rungsHtml}`;
+
+  $("card").querySelectorAll("textarea.write").forEach(ta=>{
+    ta.addEventListener("input",()=>{
+      const ri=+ta.dataset.ri; const c=cell(cur,ri);
+      setCell(cur,ri,{text:ta.value,ok:c.ok});
+      const s=$("card").querySelector(`.saved[data-ri="${ri}"]`);
+      s.classList.add("show"); clearTimeout(ta._t); ta._t=setTimeout(()=>s.classList.remove("show"),900);
+      updateProg();
+    });
+  });
+  $("card").querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const ri=+cb.dataset.ri; const c=cell(cur,ri);
+      setCell(cur,ri,{text:c.text,ok:cb.checked});
+      cb.closest(".rung").classList.toggle("done",cb.checked);
+    });
+  });
+  $("jump").value=cur;
+  updateProg();
+}
+
+function updateProg(){
+  let n=0; DATA.forEach((d,i)=>{ if(store[i]&&Object.values(store[i]).some(c=>c.text&&c.text.trim())) n++; });
+  $("progtxt").textContent=`${n} / ${DATA.length} palabras empezadas`;
+  $("progbar").style.width=(100*n/DATA.length)+"%";
+  buildJump();
+}
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
+
+function exportText(indices){
+  let out=[];
+  indices.forEach(i=>{
+    const d=DATA[i]; if(!store[i]) return;
+    const lines=[];
+    RUNGS.forEach((r,ri)=>{ const c=cell(i,ri); if(c.text&&c.text.trim()) lines.push(`[${r.name}] ${c.text.trim()}`); });
+    if(lines.length){ out.push(`=== ${d.t} (${d.m}) ===\n`+lines.join("\n")); }
+  });
+  return out.length ? out.join("\n\n") : "";
+}
+function copy(txt,label){
+  if(!txt){ toast("aún no hay nada escrito"); return; }
+  const body="Corrige mi francés (gramática, género de los sustantivos, y naturalidad). Respeta lo que quise decir:\n\n"+txt;
+  navigator.clipboard.writeText(body).then(()=>toast(label)).catch(()=>{
+    const ta=document.createElement("textarea"); ta.value=body; document.body.appendChild(ta); ta.select();
+    try{document.execCommand("copy");toast(label);}catch(e){toast("copia falló");} ta.remove();
+  });
+}
+
+$("prev").onclick=()=>{ if(cur>0){cur--;render();window.scrollTo(0,0);} };
+$("next").onclick=()=>{ if(cur<DATA.length-1){cur++;render();window.scrollTo(0,0);} };
+$("jump").onchange=e=>{ cur=+e.target.value; render(); window.scrollTo(0,0); };
+$("expOne").onclick=()=>copy(exportText([cur]),"palabra copiada → pégala al tutor");
+$("expAll").onclick=()=>copy(exportText(DATA.map((_,i)=>i)),"todo copiado → pégalo al tutor");
+$("reset").onclick=()=>{ if(confirm("¿Borrar TODAS tus frases? No se puede deshacer.")){ store={}; save(); cur=0; render(); } };
+
+buildJump(); render();
+</script>
+</body>
+</html>
