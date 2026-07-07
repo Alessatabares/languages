@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✍️ Production Gym · Nietzsche C2 · the humor ladder</title>
+<style>
+  :root{
+    --bg:#0f1420; --panel:#161d2e; --panel2:#1d2740; --line:#2a3550;
+    --ink:#e7ecf5; --mut:#93a0bd; --blue:#3b82f6; --teal:#0ea5a4;
+    --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --violet:#8b5cf6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    background:linear-gradient(180deg,#0c111c,#0f1420);color:var(--ink);line-height:1.5}
+  header{padding:14px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;letter-spacing:.3px}
+  header .sub{color:var(--mut);font-size:12.5px}
+  .prog{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mut)}
+  .bar{width:150px;height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));transition:width .4s}
+
+  .wrap{max-width:760px;margin:0 auto;padding:20px 22px 60px}
+
+  /* word nav */
+  .topnav{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .topnav select{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    padding:8px 10px;border-radius:9px;font-size:13px;max-width:230px}
+  button.ghost{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:8px 13px;border-radius:8px;cursor:pointer;font-size:12.5px}
+  button.ghost:hover{background:var(--line)}
+  button.act{background:var(--blue);border:none;color:#fff;padding:8px 15px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600}
+  button.act:hover{filter:brightness(1.1)}
+  .spacer{flex:1}
+
+  /* word card */
+  .plane{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+    padding:3px 9px;border-radius:99px;background:rgba(139,92,246,.14);border:1px solid var(--violet);color:#ddd6fe;margin-bottom:10px}
+  .term{font-size:30px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;color:#bfdbfe;margin:0 0 4px}
+  .wordn{font-size:11.5px;color:var(--mut);margin-bottom:14px}
+  .support{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:8px;font-size:13.5px}
+  .support .row{margin:5px 0}
+  .support .k{color:var(--teal);font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;margin-right:7px}
+  .support .syn{color:#a7f3d0;font-family:ui-monospace,monospace;font-size:12.5px}
+  .rule{font-size:12px;color:var(--amber);margin:12px 2px 18px;padding:9px 12px;background:rgba(245,158,11,.09);border:1px dashed rgba(245,158,11,.4);border-radius:9px}
+
+  /* rungs */
+  .rung{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;position:relative}
+  .rung.done{border-color:var(--green)}
+  .rung .head{display:flex;align-items:baseline;gap:9px;margin-bottom:3px}
+  .rung .num{font-size:12px;color:var(--mut);font-weight:700}
+  .rung .name{font-size:15px;font-weight:700}
+  .rung.r1 .name{color:#93c5fd} .rung.r2 .name{color:#7dd3fc}
+  .rung.r3 .name{color:#5eead4} .rung.r4 .name{color:#c4b5fd} .rung.r5 .name{color:#f0abfc}
+  .rung .def{font-size:13px;color:var(--mut);margin:2px 0 8px}
+  .rung .ex{font-size:12.5px;color:#cbd5e1;background:#0a1020;border-left:3px solid var(--line);padding:7px 11px;border-radius:0 7px 7px 0;margin-bottom:10px;font-style:italic}
+  .rung .ex b{color:var(--teal);font-style:normal;font-weight:600}
+  textarea.write{width:100%;min-height:52px;background:#0a1020;border:1px solid var(--line);color:#e7ecf5;
+    font-family:inherit;font-size:14px;padding:10px 12px;border-radius:9px;outline:none;resize:vertical;line-height:1.5}
+  textarea.write:focus{border-color:var(--blue)}
+  .rung .foot{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12px;color:var(--mut)}
+  .rung .foot label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+  .rung .foot .saved{color:var(--green);opacity:0;transition:.3s}
+  .rung .foot .saved.show{opacity:1}
+
+  .exportbar{position:sticky;bottom:0;background:linear-gradient(180deg,rgba(15,20,32,0),var(--bg) 40%);
+    padding:16px 0 4px;margin-top:6px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .hintmini{font-size:11.5px;color:var(--mut)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--green);color:#062611;
+    padding:9px 16px;border-radius:99px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.25s}
+  .toast.show{opacity:1}
+  details.how{margin-bottom:16px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:2px 14px}
+  details.how summary{cursor:pointer;font-size:13px;color:var(--teal);padding:9px 0;font-weight:600}
+  details.how p{font-size:13px;color:var(--mut);margin:6px 0 12px}
+  details.how ol{font-size:13px;color:var(--ink);margin:0 0 12px;padding-left:20px}
+  details.how li{margin:4px 0}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>✍️ Production Gym · Nietzsche C2</h1>
+    <div class="sub">Force each target word up the humor ladder — in <b>your own</b> situations, never about philosophy.</div>
+  </div>
+  <div class="prog">
+    <button class="ghost" id="reset" title="Erase everything">reset</button>
+    <span id="progtxt">0 / 0</span>
+    <div class="bar"><i id="progbar"></i></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <details class="how">
+    <summary>How this works (read once) ▾</summary>
+    <p>Anki taught you to <b>recognize</b> these words. This gym trains you to <b>produce</b> them by instinct: retrieve the word from a situation, fast, in a fresh context. Same 5 rungs for every word — you climb from safe to hard.</p>
+    <ol>
+      <li><b>Write</b> one sentence per rung, in your own scenario (rule: not about Nietzsche / philosophy).</li>
+      <li>Click <b>Export</b> → your sentences get copied, formatted.</li>
+      <li>Paste them to your tutor chat → get them corrected.</li>
+      <li>Paste the corrected version back into the box and tick <b>corrected ✓</b>. It stays saved.</li>
+    </ol>
+    <p>The same neutral word (<i>slow</i>) is shown climbing all 5 rungs, so you see the <b>machinery</b> of each joke-type. Don't copy it — copy the <i>move</i>.</p>
+  </details>
+
+  <div class="topnav">
+    <button class="ghost" id="prev">← prev word</button>
+    <select id="jump"></select>
+    <button class="ghost" id="next">next word →</button>
+  </div>
+
+  <div id="card"></div>
+
+  <div class="exportbar">
+    <button class="act" id="expOne">⧉ Export this word's sentences</button>
+    <button class="ghost" id="expAll">⧉ Export everything I've written</button>
+    <span class="hintmini">→ paste into your tutor chat for correction</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---- the 5-rung humor ladder (fixed) ---- one neutral word 'slow' shown climbing ---- */
+const RUNGS = [
+  {name:"Observation", def:"Say it straight. Use the word truthfully in an ordinary situation — no joke yet, just nail the real collocation.",
+   ex:"<b>Observation:</b> The office wifi is slow in the afternoons."},
+  {name:"Exaggeration", def:"Push it to comic overstatement (hyperbole). Same truth, cranked to a ridiculous size.",
+   ex:"<b>Exaggeration:</b> The wifi is so slow I've aged a full year waiting for one email to load."},
+  {name:"Irony / understatement", def:"Say it so the real meaning flips, or wildly underplay it. The gap between words and reality is the joke.",
+   ex:"<b>Irony:</b> Our 'high-speed' wifi loads a page in the time it takes to boil an egg — a real triumph of engineering."},
+  {name:"Metaphor", def:"Apply the word to something it doesn't literally belong to. Map one world onto another.",
+   ex:"<b>Metaphor:</b> The wifi doesn't crawl — it lies down in the road and refuses to get up."},
+  {name:"Absurdism", def:"Surreal logic, full non-sequitur. Follow an impossible premise with a straight face. The hardest rung.",
+   ex:"<b>Absurdism:</b> The wifi is so slow the router now charges rent to the packets that gave up and moved in."},
+];
+
+/* ---- her real Nietzsche deck (term · job it does · image or pattern · synonyms) ---- */
+const DATA = [
+  {t:"mendacious",pl:"vocab",j:"Condemn something as false by its very nature — heavier and more moral than 'untrue'; you reach for it to accuse, not just describe.",img:"A mouth that keeps producing cracked, counterfeit words.",syn:"deceitful, untruthful, lying, false"},
+  {t:"ephemeral",pl:"vocab",j:"Stress that something lasts only a brief moment, with an elevated / poetic tone.",img:"A mayfly that lives a single day; a soap bubble.",syn:"fleeting, short-lived, transient, momentary",note:"ephemeral = poetic, very brief; transient = neutral, simply passing."},
+  {t:"transient",pl:"vocab",j:"Mark something as passing / temporary in a neutral-to-formal register; common in academic prose.",img:"A passenger who gets off at the very next stop.",syn:"temporary, passing, fleeting, momentary"},
+  {t:"arbitrary",pl:"vocab",j:"Criticise a choice or rule as based on whim rather than reason — a key word for argument and critique.",img:"A coin flip deciding a law.",syn:"random, capricious, unjustified, whimsical"},
+  {t:"reprehensible",pl:"vocab",j:"Morally condemn — 'deserving of blame'. Strong, formal censure.",img:"A stern finger pointing in judgment.",syn:"blameworthy, deplorable, disgraceful, shameful"},
+  {t:"dissimulation",pl:"vocab",j:"Name the act of hiding your true feelings or intentions behind a false surface — a precise, literary word.",img:"A calm mask held over a panicking face.",syn:"pretence, concealment, dissembling, feigning"},
+  {t:"flattering",pl:"vocab",j:"Describe praise that inflates someone's self-image, often insincere or self-serving.",img:"A mirror that quietly makes you look taller.",syn:"complimentary, gratifying, fawning, ingratiating"},
+  {t:"insatiable",pl:"vocab",j:"Stress a hunger or desire that can never be satisfied — intense, formal.",img:"A pit that swallows everything and is never full.",syn:"unquenchable, voracious, ravenous, unappeasable"},
+  {t:"pitiless",pl:"vocab",j:"Describe something utterly without mercy — colder and stronger than 'cruel'.",img:"A machine that crushes without ever pausing.",syn:"merciless, ruthless, relentless, remorseless"},
+  {t:"defrauded",pl:"vocab",j:"Accuse of cheating someone (esp. of money or rights) through deception — legal / formal.",img:"A contract with clauses written in invisible ink.",syn:"swindled, cheated, deceived, duped"},
+  {t:"designation",pl:"vocab",j:"Refer formally to the act or result of naming / labelling something — academic register.",img:"A label gun tagging every object in the room.",syn:"label, name, term, denotation"},
+  {t:"tautology",pl:"vocab",j:"Name a statement that merely repeats itself and says nothing new — useful in argument and criticism.",img:"A dog chasing its own tail.",syn:"redundancy, circular statement, pleonasm"},
+  {t:"embellished",pl:"vocab",j:"Say something has been decorated or dressed up — often implying added but unreal detail. Great for writing about style.",img:"A plain cake buried under ornate icing.",syn:"adorned, decorated, ornamented, dressed up"},
+  {t:"canonical",pl:"vocab",j:"Mark something as officially accepted / authoritative — academic.",img:"Rules carved into stone tablets.",syn:"authoritative, official, established, orthodox"},
+  {t:"edifice",pl:"vocab",j:"A large, impressive structure — literal, or (very usefully) a metaphor for a whole system of ideas in an essay.",img:"A vast cathedral built entirely of glass.",syn:"structure, construction, building, framework"},
+  {t:"audacious",pl:"vocab",j:"Note boldness that borders on reckless daring — can be admiring or critical.",img:"A tightrope walker, no net, grinning.",syn:"bold, daring, fearless, brazen"},
+  {t:"ardent",pl:"vocab",j:"Describe intense, passionate feeling — warmer and more literary than 'eager'.",img:"A fire burning steadily in the chest.",syn:"passionate, fervent, intense, eager"},
+  {t:"scorn",pl:"vocab",j:"Express strong contempt — looking down on something as worthless.",img:"A curled lip turning away.",syn:"contempt, disdain, derision, mockery"},
+  {t:"prudence",pl:"vocab",j:"Name careful, sensible judgment that avoids risk — a virtue word, formal.",img:"Someone checking the weather before every single step.",syn:"caution, discretion, good sense, circumspection"},
+  {t:"ensnaring",pl:"vocab",j:"Describe trapping someone, often by trickery — literary.",img:"A net hidden under a layer of leaves.",syn:"entrapping, snaring, catching, entangling"},
+  {t:"aloof",pl:"vocab",j:"Describe being distant or detached — physically or emotionally apart, with a touch of superiority.",img:"A cat watching everything from a high shelf.",syn:"distant, detached, remote, standoffish"},
+  {t:"disenchanted",pl:"vocab",j:"Loss of illusion or magic — freed from belief but also a little deflated. Useful for tone.",img:"A magician revealed to be working hidden strings.",syn:"disillusioned, jaded, undeceived"},
+  {t:"repose",pl:"vocab",j:"A formal / literary word for calm rest or peace of mind.",img:"A still lake at dawn.",syn:"calm, tranquillity, rest, serenity"},
+  {t:"congealed",pl:"vocab",j:"Describe a liquid turning solid or thick — vivid, and a strong metaphor for ideas hardening.",img:"Warm gravy slowly turning to jelly.",syn:"solidified, set, coagulated, hardened"},
+  {t:"dispense with",pl:"verb-construction",j:"Formally say 'do without' / 'get rid of'. Elevates writing far above 'remove'.",pat:"cannot dispense with X | this step can be dispensed with",syn:"do without, forgo, get rid of, eliminate"},
+  {t:"ward off",pl:"verb-construction",j:"Keep away / prevent something bad: danger, illness, an attack, criticism.",pat:"ward off + danger / illness / criticism",syn:"fend off, stave off, avert, repel"},
+  {t:"shoring up",pl:"verb-construction",j:"Support or strengthen something weak — an argument, an economy, a structure.",pat:"shore up + an argument / the economy / a case",syn:"bolster, prop up, reinforce, buttress"},
+  {t:"wage",pl:"verb-construction",j:"The correct verb for carrying on a war, campaign or sustained struggle.",pat:"wage war / a campaign / a battle (against)",syn:"carry on, conduct, pursue, fight"},
+  {t:"lays hold of",pl:"verb-construction",j:"A literary phrase for seizing or grasping something — an idea, a tool, an opportunity.",pat:"lay hold of + an idea / a chance / a weapon",syn:"seize, grasp, take hold of, grab"},
+  {t:"carried away",pl:"verb-construction",j:"Lose self-control under the force of an emotion or impulse.",pat:"be / get carried away by + emotion / enthusiasm",syn:"get swept up, lose control, be overwhelmed"},
+  {t:"swell up",pl:"verb-construction",j:"Enlarge or inflate — literal, or a metaphor for ego and pride.",pat:"swell up like a balloon | his pride swelled up",syn:"inflate, balloon, puff up, expand"},
+  {t:"be sought",pl:"grammar",j:"Mandative subjunctive: after demand / require / insist / suggest + that, use the BASE verb (be, not is). A clear C2 marker in formal writing.",pat:"demand / insist / require that X be done (not 'is done')",note:"Register: formal. 'The rule requires that it be reviewed.'"},
+  {t:"would learn",pl:"grammar",j:"Second conditional: hypothesise about something contrary to present fact. if + past, would + base verb.",pat:"If X happened, we would see Y",note:"Unreal present / hypothetical."},
+  {t:"as though",pl:"grammar",j:"'as though / as if' + past tense expresses something imagined or unreal in the present — C2 comparison & hedging.",pat:"X behaves as though it knew / mattered / were true",note:"The past tense ('turned', 'were') signals it is NOT actually so."},
+  {t:"would have every reason to",pl:"grammar",j:"A strong, elegant way to justify a hypothetical reaction in argument.",pat:"One would have every reason to doubt / reject / fear X",syn:"would be fully justified in, would have good cause to"},
+  {t:"insofar as",pl:"connector",j:"'to the extent that / in the degree that' — a precise academic conditional connector that sharpens an argument.",pat:"Insofar as X is true, Y follows",note:"Register: formal / academic."},
+  {t:"whereas",pl:"connector",j:"Draw a clean contrast between two clauses — a formal 'while / in contrast'.",pat:"Whereas A does X, B does Y"},
+  {t:"at bottom",pl:"connector",j:"Introduce the underlying / fundamental truth beneath appearances — a sophisticated alternative to 'basically'.",pat:"At bottom, the problem is X, not Y",syn:"fundamentally, in essence, ultimately"},
+  {t:"that is to say",pl:"connector",j:"Reformulate or clarify what you just said ('i.e.') — buys precision without restarting the sentence.",pat:"X is contingent, that is to say, it could have been otherwise",syn:"in other words, i.e., namely"},
+  {t:"in short",pl:"connector",j:"Compress a list or argument into one summarising clause.",pat:"...; in short, it cannot hold",syn:"in brief, in sum, to sum up"},
+  {t:"on the contrary",pl:"connector",j:"Reject the previous idea and assert its opposite — emphatic.",pat:"It did not fail; on the contrary, it succeeded",note:"Not 'in contrast' — this NEGATES the prior claim."},
+  {t:"nevertheless",pl:"connector",j:"Concede a point yet assert something that stands against it — formal 'but still'.",pat:"The data is limited; nevertheless, the trend is clear",syn:"nonetheless, even so, all the same"},
+  {t:"henceforth",pl:"connector",j:"'from this point on' — formal, marks a turning point or a new rule.",pat:"The terms are fixed; henceforth they bind everyone",syn:"from now on, from then on, thereafter"},
+  {t:"moreover",pl:"connector",j:"Add a further, often stronger, point — formal 'also / furthermore'.",pat:"It is costly; moreover, it is unreliable",syn:"furthermore, in addition, besides, what is more"},
+  {t:"as it were",pl:"connector",j:"Soften a bold metaphor or phrasing — signals 'so to speak'. A small marker of a careful, C2 writer.",pat:"It is, as it were, the grammar of thought",syn:"so to speak, in a sense, if you will"},
+];
+
+/* ---------------- engine ---------------- */
+const KEY="prod-nietzsche-v1";
+let store = load();
+let cur = 0;
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; } }
+function save(){ localStorage.setItem(KEY, JSON.stringify(store)); }
+function cell(ci,ri){ return (store[ci]&&store[ci][ri]) || {text:"",ok:false}; }
+function setCell(ci,ri,obj){ if(!store[ci])store[ci]={}; store[ci][ri]=obj; save(); }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+const $=id=>document.getElementById(id);
+
+function buildJump(){
+  const sel=$("jump"); sel.innerHTML="";
+  DATA.forEach((d,i)=>{
+    const written = store[i] ? Object.values(store[i]).filter(c=>c.text&&c.text.trim()).length : 0;
+    const o=document.createElement("option");
+    o.value=i; o.textContent=`${i+1}. ${d.t}${written?`  (${written}/5)`:""}`;
+    sel.appendChild(o);
+  });
+  sel.value=cur;
+}
+
+function render(){
+  const d=DATA[cur];
+  let supp = `<div class="row"><span class="k">the job it does</span>${esc(d.j)}</div>`;
+  if(d.img) supp += `<div class="row"><span class="k">mental image</span>${esc(d.img)}</div>`;
+  if(d.pat) supp += `<div class="row"><span class="k">pattern</span><span class="syn">${esc(d.pat)}</span></div>`;
+  if(d.syn) supp += `<div class="row"><span class="k">synonyms</span><span class="syn">${esc(d.syn)}</span></div>`;
+  if(d.note) supp += `<div class="row"><span class="k">note</span>${esc(d.note)}</div>`;
+
+  let rungsHtml="";
+  RUNGS.forEach((r,ri)=>{
+    const c=cell(cur,ri);
+    rungsHtml += `
+     <div class="rung r${ri+1} ${c.ok?'done':''}" data-ri="${ri}">
+       <div class="head"><span class="num">${ri+1}</span><span class="name">${r.name}</span></div>
+       <div class="def">${r.def}</div>
+       <div class="ex">${r.ex}</div>
+       <textarea class="write" data-ri="${ri}" placeholder="Your sentence with “${esc(d.t)}” — your own scenario, not philosophy…">${esc(c.text)}</textarea>
+       <div class="foot">
+         <label><input type="checkbox" data-ri="${ri}" ${c.ok?'checked':''}> corrected ✓</label>
+         <span class="saved" data-ri="${ri}">saved</span>
+       </div>
+     </div>`;
+  });
+
+  $("card").innerHTML = `
+    <div class="plane">${d.pl}</div>
+    <div class="term">${esc(d.t)}</div>
+    <div class="wordn">word ${cur+1} of ${DATA.length}</div>
+    <div class="support">${supp}</div>
+    <div class="rule">✋ One rule: <b>do not write about Nietzsche, philosophy, truth or the brain.</b> Force the word into a totally different room — your day, a patient, food, a sibling, the weather.</div>
+    ${rungsHtml}`;
+
+  $("card").querySelectorAll("textarea.write").forEach(ta=>{
+    ta.addEventListener("input",()=>{
+      const ri=+ta.dataset.ri; const c=cell(cur,ri);
+      setCell(cur,ri,{text:ta.value,ok:c.ok});
+      const s=$("card").querySelector(`.saved[data-ri="${ri}"]`);
+      s.classList.add("show"); clearTimeout(ta._t); ta._t=setTimeout(()=>s.classList.remove("show"),900);
+      updateProg();
+    });
+  });
+  $("card").querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener("change",()=>{
+      const ri=+cb.dataset.ri; const c=cell(cur,ri);
+      setCell(cur,ri,{text:c.text,ok:cb.checked});
+      cb.closest(".rung").classList.toggle("done",cb.checked);
+    });
+  });
+  $("jump").value=cur;
+  updateProg();
+}
+
+function updateProg(){
+  let n=0; DATA.forEach((d,i)=>{ if(store[i]&&Object.values(store[i]).some(c=>c.text&&c.text.trim())) n++; });
+  $("progtxt").textContent=`${n} / ${DATA.length} words started`;
+  $("progbar").style.width=(100*n/DATA.length)+"%";
+  buildJump();
+}
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1600); }
+
+function exportText(indices){
+  let out=[];
+  indices.forEach(i=>{
+    const d=DATA[i]; if(!store[i]) return;
+    const lines=[];
+    RUNGS.forEach((r,ri)=>{ const c=cell(i,ri); if(c.text&&c.text.trim()) lines.push(`[${r.name}] ${c.text.trim()}`); });
+    if(lines.length){ out.push(`=== ${d.t} ===\n`+lines.join("\n")); }
+  });
+  return out.length ? out.join("\n\n") : "";
+}
+function copy(txt,label){
+  if(!txt){ toast("nothing written yet"); return; }
+  const body="Please correct my English (grammar, naturalness, and whether the humor register lands). Keep my voice:\n\n"+txt;
+  navigator.clipboard.writeText(body).then(()=>toast(label)).catch(()=>{
+    const ta=document.createElement("textarea"); ta.value=body; document.body.appendChild(ta); ta.select();
+    try{document.execCommand("copy");toast(label);}catch(e){toast("copy failed");} ta.remove();
+  });
+}
+
+$("prev").onclick=()=>{ if(cur>0){cur--;render();window.scrollTo(0,0);} };
+$("next").onclick=()=>{ if(cur<DATA.length-1){cur++;render();window.scrollTo(0,0);} };
+$("jump").onchange=e=>{ cur=+e.target.value; render(); window.scrollTo(0,0); };
+$("expOne").onclick=()=>copy(exportText([cur]),"this word copied → paste to tutor");
+$("expAll").onclick=()=>copy(exportText(DATA.map((_,i)=>i)),"everything copied → paste to tutor");
+$("reset").onclick=()=>{ if(confirm("Erase ALL your sentences? This can't be undone.")){ store={}; save(); cur=0; render(); } };
+
+buildJump(); render();
+</script>
+</body>
+</html>
