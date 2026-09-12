@@ -11,7 +11,9 @@ languages/
 ├── english/
 │   └── nietzsche-truth-lies.apkg      # C2
 ├── french/
-│   └── sorciere-rue-mouftard.apkg     # A1 -> A2
+│   ├── sorciere-rue-mouftard.apkg     # A1 -> A2
+│   ├── gentil-petit-diable.apkg       # A1  (Contes de la rue Broca)
+│   └── lustucru.apkg                  # A2  (narrated: passé simple)
 ├── portuguese/
 │   ├── loira-do-banheiro.apkg         # A1  (Historietas Assombradas 01x01)
 │   ├── globo-da-morte.apkg            # A1  (01x02)
@@ -22,6 +24,8 @@ languages/
     ├── cobertura.py                   # what a language's decks already cover
     ├── deck_english_nietzsche.py      # one script per deck = its card list
     ├── deck_french_sorciere.py
+    ├── deck_french_diable.py
+    ├── deck_french_lustucru.py
     └── deck_portuguese_*.py
 ```
 

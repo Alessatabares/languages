@@ -72,10 +72,12 @@ def main():
             n = norm(c)
             if n in cubierto:
                 return cubierto[n]
-            # los decks motor guardan reglas largas ("je voudrais -> polite...");
-            # buscar la subcadena atrapa el término dentro de la regla.
+            # los decks motor guardan reglas largas ("je voudrais -> polite...").
+            # Buscar el término dentro de la regla, pero con límites de palabra:
+            # sin ellos "ange" hacía falso positivo dentro de "change".
+            patron = r"(?<![a-z0-9])" + re.escape(n) + r"(?![a-z0-9])"
             for k, v in cubierto.items():
-                if len(n) >= 3 and n in k:
+                if re.search(patron, k):
                     return v
             return None
 
