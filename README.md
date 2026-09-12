@@ -12,10 +12,17 @@ languages/
 │   └── nietzsche-truth-lies.apkg      # C2
 ├── french/
 │   └── sorciere-rue-mouftard.apkg     # A1 -> A2
+├── portuguese/
+│   ├── loira-do-banheiro.apkg         # A1  (Historietas Assombradas 01x01)
+│   ├── globo-da-morte.apkg            # A1  (01x02)
+│   └── unicornias-princesas.apkg      # A1  (01x03)
 └── tools/
     ├── deck_builder.py                # shared .apkg builder
+    ├── yt_meta.py                     # verify a YouTube link against the transcript
+    ├── cobertura.py                   # what a language's decks already cover
     ├── deck_english_nietzsche.py      # one script per deck = its card list
-    └── deck_french_sorciere.py
+    ├── deck_french_sorciere.py
+    └── deck_portuguese_*.py
 ```
 
 ## Each deck = one `.apkg`
@@ -39,12 +46,19 @@ Back (all in English, on purpose — monolingual = transfer):
 3. Add them to a `CARDS` list and run the generator.
 4. Commit the `.apkg` into the language folder.
 
-The back is written in the strongest bridge language: **English** for both decks
-(for French, English carries the gloss + when-to-use). The level is per deck
-(English = C2, French = A1→A2), so "advanced" vs "everyday" is chosen to match.
+The back is written in the strongest bridge language: **English** for every deck
+(for French and Portuguese, English carries the gloss + when-to-use). The level is
+per deck (English = C2, French and Portuguese = A1→A2), so "advanced" vs "everyday"
+is chosen to match.
+
+**One term, one deck per language.** Decks of the same language are a system, not
+a pile: a term carded in one deck is not carded again in the next, so review time
+is never spent twice on the same item. `tools/cobertura.py <language>` reports what
+is already covered.
 
 ```bash
 pip install -r requirements.txt
-python tools/deck_english_nietzsche.py   # -> english/nietzsche-truth-lies.apkg
-python tools/deck_french_sorciere.py     # -> french/sorciere-rue-mouftard.apkg
+python tools/deck_english_nietzsche.py     # -> english/nietzsche-truth-lies.apkg
+python tools/deck_french_sorciere.py       # -> french/sorciere-rue-mouftard.apkg
+python tools/deck_portuguese_loira.py      # -> portuguese/loira-do-banheiro.apkg
 ```
